@@ -27,6 +27,18 @@ public class Problem {
         this.collabs = collabs;
     }
 
+    public Player getToMove() {
+        return toMove;
+    }
+
+    public Set<Actor> getMoveOptions() {
+        return moveOptions;
+    }
+
+    public Map<Actor, Set<Actor>> getCollabs() {
+        return collabs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
