@@ -9,6 +9,18 @@ public class Problem {
     private Set<Actor> moveOptions;
     private Map<Actor, Set<Actor>> collabs;
 
+    public Player getToMove() {
+        return toMove;
+    }
+
+    public Set<Actor> getMoveOptions() {
+        return moveOptions;
+    }
+
+    public Map<Actor, Set<Actor>> getCollabs() {
+        return collabs;
+    }
+
     public Problem(Player toMove, Set<Actor> moveOptions, Map<Actor, Set<Actor>> collabs) {
         this.toMove = toMove;
         this.moveOptions = moveOptions;
