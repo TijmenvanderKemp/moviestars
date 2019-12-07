@@ -1,9 +1,7 @@
 package com.tijmen;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Algorithm {
     private Problem problem;
@@ -31,18 +29,17 @@ public class Algorithm {
             return encountered.get(problem);
         }
 
-        Iterator<Actor> iterator = options.iterator();
-        while(iterator.hasNext()) {
+        for (Actor actor : options) {
 
-            Actor actor = iterator.next();
-            Map<Actor, Set<Actor>> collabsWithoutActor = new HashMap<>(problem.getCollabs());
+            Map<Actor, Set<Actor>> collabsWithoutActor = problem.getCollabs().entrySet().stream()
+                    .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<>(e.getValue())));
             Set<Actor> coworkers = collabsWithoutActor.get(actor);
-            coworkers.stream().forEach(actor2 -> collabsWithoutActor.get(actor2).remove(actor));
+            coworkers.forEach(actor2 -> collabsWithoutActor.get(actor2).remove(actor));
             collabsWithoutActor.remove(actor);
             Problem subProblem = new Problem(player.next(), coworkers, collabsWithoutActor);
             Algorithm subalgorithm = new Algorithm(subProblem, encountered);
 
-            if(subalgorithm.solve().equals(player)) {
+            if (subalgorithm.solve().equals(player)) {
                 return player;
             } else {
                 encountered.put(problem, player.next());
