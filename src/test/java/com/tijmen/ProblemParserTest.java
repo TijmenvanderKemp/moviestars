@@ -28,7 +28,7 @@ public class ProblemParserTest {
     }
 
     private Actor actor(String name) {
-        return new Actor(name, Sex.MALE);
+        return new Actor(name);
     }
 
 }

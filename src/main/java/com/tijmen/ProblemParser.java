@@ -8,9 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.tijmen.Sex.FEMALE;
-import static com.tijmen.Sex.MALE;
-
 public class ProblemParser {
     public Problem parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
@@ -19,8 +16,8 @@ public class ProblemParser {
         String[] actorsAndMovies = s.split(" ");
         int numberOfActors = Integer.parseInt(actorsAndMovies[0]);
         int numberOfMovies = Integer.parseInt(actorsAndMovies[1]);
-        Set<Actor> femaleActors = getActors(in, numberOfActors, FEMALE);
-        Set<Actor> maleActors = getActors(in, numberOfActors, MALE);
+        Set<Actor> femaleActors = getActors(in, numberOfActors);
+        Set<Actor> maleActors = getActors(in, numberOfActors);
 
         Set<Actor> allActors = new HashSet<>(femaleActors);
         allActors.addAll(maleActors);
@@ -28,30 +25,31 @@ public class ProblemParser {
         Map<Actor, Set<Actor>> collabs = allActors.stream()
                 .collect(Collectors.toMap(actor -> actor, actor -> new HashSet<>()));
         for (int i = 0; i < numberOfMovies; i++) {
-            addCollabs(in, allActors, collabs);
+            addCollabs(in, femaleActors, maleActors, allActors, collabs);
         }
 
         return new Problem(Player.VERONIQUE, femaleActors, collabs);
     }
 
-    private Set<Actor> getActors(Scanner in, int numberOfActors, Sex sex) {
+    private Set<Actor> getActors(Scanner in, int numberOfActors) {
         return IntStream.range(0, numberOfActors).boxed()
                 .map(integer -> in.nextLine())
-                .map(name -> new Actor(name, sex))
+                .map(Actor::new)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    private void addCollabs(Scanner in, Set<Actor> allActors, Map<Actor, Set<Actor>> collabs) {
+    private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors, Set<Actor> allActors,
+                            Map<Actor, Set<Actor>> collabs) {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
         Set<Actor> cast = getCast(in, allActors, castSize);
 
         Set<Actor> femaleCast = cast.stream()
-                .filter(actor -> actor.sex == FEMALE)
+                .filter(femaleActors::contains)
                 .collect(Collectors.toSet());
         Set<Actor> maleCast = cast.stream()
-                .filter(actor -> actor.sex == MALE)
+                .filter(maleActors::contains)
                 .collect(Collectors.toSet());
 
         femaleCast.forEach(actress -> collabs.get(actress).addAll(maleCast));

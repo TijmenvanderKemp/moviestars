@@ -4,11 +4,9 @@ import java.util.Objects;
 
 public class Actor {
     public String name;
-    public Sex sex;
 
-    public Actor(String name, Sex sex) {
+    public Actor(String name) {
         this.name = name;
-        this.sex = sex;
     }
 
     public String getName() {
