@@ -22,7 +22,7 @@ public class Problem {
         Problem problem = (Problem) o;
         return toMove == problem.toMove &&
                 Objects.equals(moveOptions, problem.moveOptions) &&
-                Objects.equals(collabs, problem.collabs);
+        Objects.equals(collabs, problem.collabs);
     }
 
     @Override
