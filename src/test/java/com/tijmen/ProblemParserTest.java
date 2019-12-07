@@ -11,7 +11,7 @@ public class ProblemParserTest {
 
     @Test
     public void test() {
-        InputStream asStream = TestFile.getAsStream("samples/a1.in");
+        InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
         Problem problem = new ProblemParser().parse(asStream);
 
         assertThat(problem.getToMove()).isEqualTo(VERONIQUE);
