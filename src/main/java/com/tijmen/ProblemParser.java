@@ -13,23 +13,6 @@ public class ProblemParser {
         int numberOfVertices = Integer.parseInt(edgesAndVerticesAndBins[1]);
         int numberOfBins = Integer.parseInt(edgesAndVerticesAndBins[2]);
 
-        Graph graph = new Graph(numberOfVertices);
-
-        for (int i = 0; i < numberOfEdges; i++) {
-            parseEdge(in, graph);
-        }
-
-        graph.buildAdjacencyLists();
-
-        return new Problem(graph, numberOfBins);
-    }
-
-    private void parseEdge(Scanner in, Graph graph) {
-        String edgeAsString = in.nextLine();
-        String[] verticesFromAndTo = edgeAsString.split(" ");
-        int vertexFrom = Integer.parseInt(verticesFromAndTo[0]);
-        int vertexTo = Integer.parseInt(verticesFromAndTo[1]);
-
-        graph.addEdge(vertexFrom, vertexTo);
+        return new Problem(null, null, null);
     }
 }
