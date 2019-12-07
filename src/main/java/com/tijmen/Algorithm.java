@@ -25,6 +25,10 @@ public class Algorithm {
         Set<Actor> options = problem.getMoveOptions();
         Player player = problem.getToMove();
 
+        /*if(options.stream().noneMatch(actor -> picked.contains(actor))) {
+            return player.next();
+        }*/
+
         if(options.isEmpty()) {
             return player.next();
         }
