@@ -15,9 +15,20 @@ public class ProblemParserTest {
         Problem problem = new ProblemParser().parse(asStream);
 
         assertThat(problem.getToMove()).isEqualTo(VERONIQUE);
-        assertThat(problem.getMoveOptions()).containsExactlyInAnyOrder(
-                new Actor("MelanieLaurent", Sex.FEMALE),
-                new Actor("DianaKruger", Sex.FEMALE));
+        ActorSetAssert.assertThat(problem.getMoveOptions())
+                .containsExactlyInAnyOrder("MelanieLaurent", "DianaKruger");
+        ActorSetAssert.assertThat(problem.getCollabs().get(actor("MelanieLaurent")))
+                .containsExactlyInAnyOrder("BradPitt");
+        ActorSetAssert.assertThat(problem.getCollabs().get(actor("BradPitt")))
+                .containsExactlyInAnyOrder("MelanieLaurent", "DianaKruger");
+        ActorSetAssert.assertThat(problem.getCollabs().get(actor("NormanReedus")))
+                .containsExactlyInAnyOrder("DianaKruger");
+        ActorSetAssert.assertThat(problem.getCollabs().get(actor("DianaKruger")))
+                .containsExactlyInAnyOrder("BradPitt", "NormanReedus");
+    }
+
+    private Actor actor(String name) {
+        return new Actor(name, Sex.MALE);
     }
 
 }
