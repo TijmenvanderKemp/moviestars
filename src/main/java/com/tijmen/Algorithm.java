@@ -1,6 +1,9 @@
 package com.tijmen;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Algorithm {
@@ -31,8 +34,7 @@ public class Algorithm {
 
         for (Actor actor : options) {
 
-            Map<Actor, Set<Actor>> collabsWithoutActor = problem.getCollabs().entrySet().stream()
-                    .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<>(e.getValue())));
+            Map<Actor, Set<Actor>> collabsWithoutActor = deepCopyMap(problem.getCollabs());
             Set<Actor> coworkers = collabsWithoutActor.get(actor);
             coworkers.forEach(actor2 -> collabsWithoutActor.get(actor2).remove(actor));
             collabsWithoutActor.remove(actor);
@@ -48,6 +50,12 @@ public class Algorithm {
 
         return player.next();
 
+    }
+
+    static Map<Actor, Set<Actor>> deepCopyMap(Map<Actor, Set<Actor>> map) {
+        return map.entrySet()
+                .stream()
+                .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<>(e.getValue())));
     }
 
 }
