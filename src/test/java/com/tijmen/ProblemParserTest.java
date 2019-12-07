@@ -15,6 +15,9 @@ public class ProblemParserTest {
         Problem problem = new ProblemParser().parse(asStream);
 
         assertThat(problem.getToMove()).isEqualTo(VERONIQUE);
+        assertThat(problem.getMoveOptions()).containsExactlyInAnyOrder(
+                new Actor("MelanieLaurent", Sex.FEMALE),
+                new Actor("DianaKruger", Sex.FEMALE));
     }
 
 }

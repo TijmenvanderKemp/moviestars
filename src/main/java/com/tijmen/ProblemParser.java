@@ -25,7 +25,7 @@ public class ProblemParser {
         Set<Actor> allActors = new HashSet<>(femaleActors);
         allActors.addAll(maleActors);
 
-        Map<Actor, Set<Actor>> collabs = maleActors.stream()
+        Map<Actor, Set<Actor>> collabs = allActors.stream()
                 .collect(Collectors.toMap(actor -> actor, actor -> new HashSet<>()));
         for (int i = 0; i < numberOfMovies; i++) {
             addCollabs(in, allActors, collabs);

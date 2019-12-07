@@ -24,4 +24,9 @@ public class Actor {
     public int hashCode() {
         return Objects.hash(name, sex);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
