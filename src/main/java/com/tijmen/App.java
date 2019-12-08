@@ -10,6 +10,6 @@ public final class App
         ProblemParser parser = new ProblemParser();
         Problem problem = parser.parse(System.in);
         Player victor = new Algorithm(problem).solve();
-        System.out.println(victor.name);
+        System.out.println(victor.getName());
     }
 }

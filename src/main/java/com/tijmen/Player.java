@@ -4,9 +4,9 @@ public enum Player {
     MARK("Mark"),
     VERONIQUE("Veronique");
 
-    String name;
+    private String name;
 
-    private Player(String name) {
+    Player(String name) {
         this.name = name;
     }
 

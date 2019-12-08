@@ -9,7 +9,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AllFilesTest {
+public class AllFilesTestAlgorithmByItself {
     @Test
     public void testAlleOfficieleFiles() {
         File inFolder = new File(TestFile.getAsUrl("samples/in/").getPath());
@@ -28,21 +28,21 @@ public class AllFilesTest {
     private void test(Pair<File, File> inAndOut) {
         try {
             System.out.println("Testing " + inAndOut.getLeft().getName());
-            Problem problem = getProblem(inAndOut);
+            AlgorithmByItself algorithm = getProblem(inAndOut);
             String solution = getSolution(inAndOut);
-            testSolve(problem, solution);
+            testSolve(algorithm, solution);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void testSolve(Problem in, String solution) {
-        Player victor = new Algorithm(in, new HashMap<>()).solve();
-        assertThat(victor.name).isEqualTo(solution);
+    private void testSolve(AlgorithmByItself algorithm, String solution) {
+        Player victor = algorithm.solve();
+        assertThat(victor.getName()).isEqualTo(solution);
     }
 
-    private Problem getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
-        return new ProblemParser().parse(new FileInputStream(inAndOut.getLeft()));
+    private AlgorithmByItself getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
+        return new AlgorithmParser().parse(new FileInputStream(inAndOut.getLeft()));
     }
 
     private String getSolution(Pair<File, File> inAndOut) throws FileNotFoundException {
