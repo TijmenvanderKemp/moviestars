@@ -7,20 +7,21 @@ public class AlgorithmByItself {
     private Map<SubProblem, Player>  encountered;
     private Map<Actor, Set<Actor>> collabs;
     private Set<Actor> firstOptions;
+    private Set<Actor> picked;
 
     AlgorithmByItself(Map<Actor, Set<Actor>> collabs, Set<Actor> firstOptions) {
         this.collabs = collabs;
         this.firstOptions = firstOptions;
         encountered = new HashMap<>();
+        picked = new HashSet<>();
     }
 
     public Player solve() {
         Player player = Player.VERONIQUE;
 
         for(Actor actor : firstOptions) {
-            Set<Actor> picked = new HashSet<>();
             picked.add(actor);
-            if (solve(player.next(), actor, picked).equals(player)) {
+            if (solve(player.next(), actor).equals(player)) {
                 //System.out.print("Winning pick: " + actor);
                 return player;
             }
@@ -28,7 +29,7 @@ public class AlgorithmByItself {
         return player.next();
     }
 
-    public Player solve(Player player, Actor actor , Set<Actor> picked) {
+    public Player solve(Player player, Actor actor) {
 
         //System.out.println(picked.size() + " " + player.getName()  + " " + actor + " " + picked);
 
@@ -49,15 +50,16 @@ public class AlgorithmByItself {
         for (Actor coworker : actualOptions) {
             //System.out.println("\n" + picked.size() + " " + actor + " -> " + coworker + " / " + allOptions.stream().filter(coworker2 -> !picked.contains(coworker2)).collect(Collectors.toList()));
 
-            Set<Actor> newPicked = new HashSet<>(picked);
-            SubProblem subProblem = new SubProblem(newPicked, coworker);
-            newPicked.add(coworker);
-            if (solve(player.next(), coworker, newPicked).equals(player)) {
+            picked.add(coworker);
+            if (solve(player.next(), coworker).equals(player)) {
                 //System.out.println(picked.size() + " Winning actor: " + coworker + " winning player: " + player.getName() + " ");
-                encountered.put(subProblem, player);
+                //encountered.put(subProblem, player);
+                picked.remove(coworker);
                 return player;
             } else {
+                picked.remove(coworker);
                 //System.out.println(picked.size() + " Losing actor: " + coworker + " losing player: " + player.getName() + " ");
+                SubProblem subProblem = new SubProblem(new HashSet<>(picked) , coworker);
                 encountered.put(subProblem, player.next());
             }
         }
