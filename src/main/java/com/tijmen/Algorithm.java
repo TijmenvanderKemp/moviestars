@@ -1,65 +1,36 @@
 package com.tijmen;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Algorithm {
-    private Problem problem;
-    private Map<Problem, Player>  encountered;
+    private BipartiteGraph graph;
 
-    Algorithm(Problem problem) {
-        this.problem = problem;
-        encountered = new HashMap<>();
-    }
-
-    Algorithm(Problem problem, Map<Problem, Player> encountered) {
-        this.problem = problem;
-        this.encountered = encountered;
+    Algorithm(BipartiteGraph graph) {
+        this.graph = graph;
     }
 
     public Player solve() {
-
-        Set<Actor> options = problem.getMoveOptions();
-        Player player = problem.getToMove();
-
-        /*if(options.stream().noneMatch(actor -> picked.contains(actor))) {
-            return player.next();
-        }*/
-
-        if(options.isEmpty()) {
-            return player.next();
-        }
-        if(encountered.containsKey(problem)) {
-            return encountered.get(problem);
-        }
-
-        for (Actor actor : options) {
-
-            Map<Actor, Set<Actor>> collabsWithoutActor = deepCopyMap(problem.getCollabs());
-            Set<Actor> coworkers = collabsWithoutActor.get(actor);
-            coworkers.forEach(actor2 -> collabsWithoutActor.get(actor2).remove(actor));
-            collabsWithoutActor.remove(actor);
-            Problem subProblem = new Problem(player.next(), coworkers, collabsWithoutActor);
-            Algorithm subalgorithm = new Algorithm(subProblem, encountered);
-
-            if (subalgorithm.solve().equals(player)) {
-                return player;
-            } else {
-                encountered.put(problem, player.next());
-            }
-        }
-
-        return player.next();
-
+    Optional<LinkedList<Actor>> augmentingPath = graph.augmentingPathExists();
+    while(augmentingPath.isPresent()) {
+        graph.augmentGraph(augmentingPath.get());
+        augmentingPath = graph.augmentingPathExists();
     }
 
-    static Map<Actor, Set<Actor>> deepCopyMap(Map<Actor, Set<Actor>> map) {
-        return map.entrySet()
-                .stream()
-                .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<>(e.getValue())));
+    if(graph.getFreeWomen().isEmpty()) {
+        return Player.MARK;
+    } else {
+        return Player.VERONIQUE;
+    }
+        /*
+    Hopcroft-Karp algorithm for finding maximal matching in bipartite graph:
+    1) Initialize Maximal Matching M as empty.
+    2) While there exists an Augmenting Path p
+     Remove matching edges of p from M and add not-matching edges of p to M
+     (This increases size of M by 1 as p starts and ends with a free vertex)
+    3) Return M.
+    */
+
     }
 
 }
