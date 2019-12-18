@@ -33,13 +33,7 @@ public class Graph {
                 if(freeMen.contains(coworker)) {
                     // create the augmenting path if a free man is found
                     parent.put(coworker, actor);
-                    LinkedList<Actor> augmentingPath = new LinkedList<>();
-                    Actor child = coworker;
-                    while(child != null) {
-                        augmentingPath.add(child);
-                        child = parent.get(child);
-                    }
-                    return Optional.of(augmentingPath);
+                    return Optional.of(createAugmentingPath(parent, coworker));
                 }
                 if(!parent.containsKey(coworker)) {
                     parent.put(coworker, actor);
@@ -48,6 +42,16 @@ public class Graph {
             }
         }
         return Optional.empty();
+    }
+
+    private LinkedList<Actor> createAugmentingPath(Map<Actor, Actor> parentMap, Actor finalChild) {
+        LinkedList<Actor> augmentingPath = new LinkedList<>();
+        Actor child = finalChild;
+        while(child != null) {
+            augmentingPath.add(child);
+            child = parentMap.get(child);
+        }
+        return augmentingPath;
     }
 
     public void augmentGraph(LinkedList<Actor> augmentingPath) {
