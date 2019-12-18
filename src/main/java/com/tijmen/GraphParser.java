@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ProblemParser {
-    public Problem parse(InputStream inputMethod) {
+public class GraphParser {
+    public Graph parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
 
         String s = in.nextLine();
@@ -28,7 +28,7 @@ public class ProblemParser {
             addCollabs(in, femaleActors, maleActors, allActors, collabs);
         }
 
-        return new Problem(Player.VERONIQUE, femaleActors, collabs);
+        return new Graph(femaleActors, maleActors, collabs);
     }
 
     private Set<Actor> getActors(Scanner in, int numberOfActors) {
@@ -53,7 +53,6 @@ public class ProblemParser {
                 .collect(Collectors.toSet());
 
         femaleCast.forEach(actress -> collabs.get(actress).addAll(maleCast));
-        maleCast.forEach(actor -> collabs.get(actor).addAll(femaleCast));
     }
 
     private Set<Actor> getCast(Scanner in, Set<Actor> allActors, int castSize) {

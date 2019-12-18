@@ -7,9 +7,9 @@ public final class App
 
     public static void main( String[] args )
     {
-        ProblemParser parser = new ProblemParser();
-        Problem problem = parser.parse(System.in);
-        Player victor = new Algorithm(problem).solve();
+        GraphParser parser = new GraphParser();
+        Graph graph = parser.parse(System.in);
+        Player victor = new Algorithm(graph).solve();
         System.out.println(victor.getName());
     }
 }

@@ -2,14 +2,14 @@ package com.tijmen;
 
 import java.util.*;
 
-public class BipartiteGraph {
+public class Graph {
     private Set<Actor> femaleActors; // left side
     private Set<Actor> maleActors; // right side
     private Set<Actor> freeWomen; // Women not part of the maximal matching
     private Set<Actor> freeMen; // Men not part of the maximal matching
     private Map<Actor, Set<Actor>> collabs; // edges
 
-    public BipartiteGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
+    public Graph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
         this.femaleActors = femaleActors;
         this.maleActors = maleActors;
         this.collabs = collabs;
@@ -32,6 +32,7 @@ public class BipartiteGraph {
             for(Actor coworker : coworkers) {
                 if(freeMen.contains(coworker)) {
                     // create the augmenting path if a free man is found
+                    parent.put(coworker, actor);
                     LinkedList<Actor> augmentingPath = new LinkedList<>();
                     Actor child = coworker;
                     while(child != null) {
@@ -51,8 +52,8 @@ public class BipartiteGraph {
 
     public void augmentGraph(LinkedList<Actor> augmentingPath) {
 
-        freeWomen.remove(augmentingPath.getFirst());
-        freeMen.remove(augmentingPath.getLast());
+        freeWomen.remove(augmentingPath.getLast());
+        freeMen.remove(augmentingPath.getFirst());
 
         Iterator<Actor> iterator = augmentingPath.descendingIterator();
         Actor actor1 = iterator.next();
@@ -82,11 +83,23 @@ public class BipartiteGraph {
         return freeMen;
     }
 
+    public Set<Actor> getFemaleActors() {
+        return femaleActors;
+    }
+
+    public Set<Actor> getMaleActors() {
+        return maleActors;
+    }
+
+    public Map<Actor, Set<Actor>> getCollabs() {
+        return collabs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BipartiteGraph that = (BipartiteGraph) o;
+        Graph that = (Graph) o;
         return Objects.equals(femaleActors, that.femaleActors) &&
                 Objects.equals(maleActors, that.maleActors) &&
                 Objects.equals(freeWomen, that.freeWomen) &&

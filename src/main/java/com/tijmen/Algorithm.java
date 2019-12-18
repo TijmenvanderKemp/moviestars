@@ -1,12 +1,11 @@
 package com.tijmen;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Algorithm {
-    private BipartiteGraph graph;
+    private Graph graph;
 
-    Algorithm(BipartiteGraph graph) {
+    Algorithm(Graph graph) {
         this.graph = graph;
     }
 
