@@ -14,7 +14,7 @@ public class HopcroftKarpGraphTest {
     @Test
     public void augmentingPathExists() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
-        HopcroftKarpGraph graph = new HopcroftKarpParser().parse(asStream);
+        HopcroftKarpGraph graph = HopcroftKarpGraph.of(new HopcroftKarpParser().parse(asStream));
 
         assertThat(graph.findAugmentingPath().isPresent());
     }
@@ -22,7 +22,7 @@ public class HopcroftKarpGraphTest {
     @Test
     public void augmentGraph() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
-        HopcroftKarpGraph graph = new HopcroftKarpParser().parse(asStream);
+        HopcroftKarpGraph graph = HopcroftKarpGraph.of(new HopcroftKarpParser().parse(asStream));
         LinkedList<Actor> augmentingPath1 = graph.findAugmentingPath().get();
         Actor firstActor = augmentingPath1.getLast();
         Set<Actor> firstActorOptions = new HashSet<>(graph.getCollabs().get(firstActor));

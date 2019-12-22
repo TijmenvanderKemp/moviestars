@@ -12,7 +12,7 @@ public class HopcroftKarpAlgorithmTest {
     @Test
     public void solve() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
-        HopcroftKarpGraph graph = new HopcroftKarpParser().parse(asStream);
+        HopcroftKarpGraph graph = HopcroftKarpGraph.of(new HopcroftKarpParser().parse(asStream));
         HopcroftKarpAlgorithm hopcroftKarpAlgorithm = new HopcroftKarpAlgorithm(graph);
         assertThat(hopcroftKarpAlgorithm.solve()).isEqualTo(Player.MARK);
     }

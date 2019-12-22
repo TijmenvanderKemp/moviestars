@@ -6,7 +6,8 @@ public final class Main {
 
     public static void main(String[] args) {
         HopcroftKarpParser parser = new HopcroftKarpParser();
-        HopcroftKarpGraph graph = parser.parse(System.in);
+        Problem problem = parser.parse(System.in);
+        HopcroftKarpGraph graph = HopcroftKarpGraph.of(problem);
         Player victor = new HopcroftKarpAlgorithm(graph).solve();
         System.out.println(victor.getName());
     }

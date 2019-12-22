@@ -45,7 +45,7 @@ public class AllFilesTestHopcroftKarpAlgorithm {
     }
 
     private HopcroftKarpGraph getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
-        return new HopcroftKarpParser().parse(new FileInputStream(inAndOut.getLeft()));
+        return HopcroftKarpGraph.of(new HopcroftKarpParser().parse(new FileInputStream(inAndOut.getLeft())));
     }
 
     private String getSolution(Pair<File, File> inAndOut) throws FileNotFoundException {

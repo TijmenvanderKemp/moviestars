@@ -6,33 +6,32 @@ import java.util.stream.Collectors;
 
 public class HopcroftKarpParser {
 
-    private Map<String, Integer> customHashes = new HashMap<>();
+    private ActorRepository actorRepository = new ActorRepository();
 
-    public HopcroftKarpGraph parse(InputStream inputMethod) {
+    public Problem parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
 
         String s = in.nextLine();
         String[] actorsAndMovies = s.split(" ");
         int numberOfActors = Integer.parseInt(actorsAndMovies[0]);
         int numberOfMovies = Integer.parseInt(actorsAndMovies[1]);
-        Set<Actor> femaleActors = getActors(in, numberOfActors, 0);
-        Set<Actor> maleActors = getActors(in, numberOfActors, numberOfActors);
+        actorRepository.femaleActors = getActors(in, numberOfActors, 0);
+        actorRepository.maleActors = getActors(in, numberOfActors, numberOfActors);
 
-        Set<Actor> allActors = new HashSet<>(femaleActors);
-        allActors.addAll(maleActors);
+        Set<Actor> allActors = actorRepository.getAllActors();
 
-        Map<Actor, Map<Actor,Integer>> collabCount = allActors.stream()
+        Map<Actor, Map<Actor, Integer>> collabCount = allActors.stream()
                 .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
         for (int i = 0; i < numberOfMovies; i++) {
-            addCollabs(in, femaleActors, maleActors, collabCount);
+            addCollabs(in, collabCount);
         }
 
         Map<Actor, Set<Actor>> collabs = new HashMap<>();
         for (Actor actor : collabCount.keySet()) {
-            collabs.put(actor, new HashSet(collabCount.get(actor).keySet()));
+            collabs.put(actor, new HashSet<>(collabCount.get(actor).keySet()));
         }
 
-        return new HopcroftKarpGraph(femaleActors, maleActors, collabs);
+        return new Problem(actorRepository, collabs, collabCount);
     }
 
     private Set<Actor> getActors(Scanner in, int numberOfActors, int startOfHash) {
@@ -41,24 +40,23 @@ public class HopcroftKarpParser {
             Integer integer = i;
             String name = in.nextLine();
             Actor actor = new Actor(name, startOfHash + i);
-            customHashes.put(name, startOfHash + i);
+            actorRepository.customHashes.put(name, startOfHash + i);
             set.add(actor);
         }
         return set;
     }
 
-    private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors,
-                            Map<Actor, Map<Actor,Integer>> collabs) {
+    private void addCollabs(Scanner in, Map<Actor, Map<Actor, Integer>> collabs) {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
         Set<Actor> cast = getCast(in, castSize);
 
         Set<Actor> femaleCast = cast.stream()
-                .filter(femaleActors::contains)
+                .filter(actorRepository.femaleActors::contains)
                 .collect(Collectors.toSet());
         Set<Actor> maleCast = cast.stream()
-                .filter(maleActors::contains)
+                .filter(actorRepository.maleActors::contains)
                 .collect(Collectors.toSet());
 
 
@@ -79,7 +77,7 @@ public class HopcroftKarpParser {
         Set<Actor> set = new HashSet<>();
         for (int i = 0; i < castSize; i++) {
             String name = in.nextLine();
-            set.add(new Actor(name, customHashes.get(name)));
+            set.add(new Actor(name, actorRepository.customHashes.get(name)));
         }
         return set;
     }

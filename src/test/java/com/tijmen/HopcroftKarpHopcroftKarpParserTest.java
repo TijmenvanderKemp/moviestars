@@ -9,7 +9,7 @@ public class HopcroftKarpHopcroftKarpParserTest {
     @Test
     public void test() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
-        HopcroftKarpGraph graph = new HopcroftKarpParser().parse(asStream);
+        HopcroftKarpGraph graph = HopcroftKarpGraph.of(new HopcroftKarpParser().parse(asStream));
 
         ActorSetAssert.assertThat(graph.getCollabs().get(actor("MelanieLaurent", 1)))
                 .containsExactlyInAnyOrder("BradPitt");

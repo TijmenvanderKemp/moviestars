@@ -17,6 +17,11 @@ public class HopcroftKarpGraph {
         freeWomen = new HashSet<>(femaleActors);
     }
 
+
+    public static HopcroftKarpGraph of(Problem problem) {
+        return new HopcroftKarpGraph(problem.actorRepository.femaleActors, problem.actorRepository.maleActors, problem.collabs);
+    }
+
     public Optional<LinkedList<Actor>> findAugmentingPath() {
 
         // breadth first search until a free man is encountered. return that free man if found, return empty optional otherwise.
