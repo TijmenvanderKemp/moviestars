@@ -31,34 +31,27 @@ public class MinMaxAlgorithm {
 
     public Player solve(Player player, Actor actor) {
 
-        //System.out.println(picked.size() + " " + player.getName()  + " " + actor + " " + picked);
 
         Set<Actor> allOptions = collabs.get(actor);
         List<Actor> actualOptions = allOptions.stream().filter(coworker -> !picked.contains(coworker)).sorted(Comparator.comparing(coworker -> collabs.get(coworker).size())).collect(Collectors.toList());
 
         if(actualOptions.isEmpty()) {
-            //System.out.print(" no coworkers left ");
             return player.next();
         }
 
         SubProblem problem = new SubProblem(picked, actor);
         if(encountered.containsKey(problem)) {
-            // System.out.print(" encountered before: " + picked + " ");
             return encountered.get(problem);
         }
 
         for (Actor coworker : actualOptions) {
-            //System.out.println("\n" + picked.size() + " " + actor + " -> " + coworker + " / " + allOptions.stream().filter(coworker2 -> !picked.contains(coworker2)).collect(Collectors.toList()));
 
             picked.add(coworker);
             if (solve(player.next(), coworker).equals(player)) {
-                //System.out.println(picked.size() + " Winning actor: " + coworker + " winning player: " + player.getName() + " ");
-                //encountered.put(subProblem, player);
                 picked.remove(coworker);
                 return player;
             } else {
                 picked.remove(coworker);
-                //System.out.println(picked.size() + " Losing actor: " + coworker + " losing player: " + player.getName() + " ");
                 SubProblem subProblem = new SubProblem(new HashSet<>(picked) , coworker);
                 encountered.put(subProblem, player.next());
             }

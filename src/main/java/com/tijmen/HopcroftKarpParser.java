@@ -1,10 +1,7 @@
 package com.tijmen;
 
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,8 +19,8 @@ public class HopcroftKarpParser {
         Set<Actor> allActors = new HashSet<>(femaleActors);
         allActors.addAll(maleActors);
 
-        Map<Actor, Set<Actor>> collabs = allActors.stream()
-                .collect(Collectors.toMap(actor -> actor, actor -> new HashSet<>()));
+        Map<Actor, Map<Actor,Integer>> collabs = allActors.stream()
+                .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
         for (int i = 0; i < numberOfMovies; i++) {
             addCollabs(in, femaleActors, maleActors, collabs);
         }
@@ -39,7 +36,7 @@ public class HopcroftKarpParser {
     }
 
     private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors,
-                            Map<Actor, Set<Actor>> collabs) {
+                            Map<Actor, Map<Actor,Integer>> collabs) {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
@@ -52,7 +49,18 @@ public class HopcroftKarpParser {
                 .filter(maleActors::contains)
                 .collect(Collectors.toSet());
 
-        femaleCast.forEach(actress -> collabs.get(actress).addAll(maleCast));
+
+        for (Actor actress : femaleCast) {
+            Map<Actor, Integer> collabsWithActress = collabs.get(actress);
+            for(Actor actor : maleCast) {
+                if(collabsWithActress.containsKey(actor)) {
+                    int number = collabsWithActress.get(actor);
+                    collabsWithActress.put(actor, number + 1);
+                } else {
+                    collabsWithActress.put(actor, 1);
+                }
+            }
+        }
     }
 
     private Set<Actor> getCast(Scanner in, int castSize) {

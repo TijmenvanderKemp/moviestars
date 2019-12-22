@@ -7,9 +7,9 @@ public class HopcroftKarpGraph {
     private Set<Actor> maleActors; // right side
     private Set<Actor> freeWomen; // Women not part of the maximal matching
     private Set<Actor> freeMen; // Men not part of the maximal matching
-    private Map<Actor, Set<Actor>> collabs; // edges
+    private Map<Actor, Map<Actor,Integer>> collabs; // edges
 
-    public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
+    public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Map<Actor,Integer>> collabs) {
         this.femaleActors = femaleActors;
         this.maleActors = maleActors;
         this.collabs = collabs;
@@ -28,8 +28,8 @@ public class HopcroftKarpGraph {
         }
         while (!queue.isEmpty()) {
             Actor actor = queue.remove();
-            Set<Actor> coworkers = collabs.get(actor);
-            for (Actor coworker : coworkers) {
+            Map<Actor,Integer> coworkers = collabs.get(actor);
+            for (Actor coworker : coworkers.keySet()) {
                 if (freeMen.contains(coworker)) {
                     // create the augmenting path if a free man is found
                     predecessors.put(coworker, actor);
@@ -70,12 +70,14 @@ public class HopcroftKarpGraph {
     }
 
     private void switchDirections(Actor a1, Actor a2) {
-        if(collabs.get(a1).contains(a2)) {
+        if(collabs.get(a1).containsKey(a2)) {
+            int number = collabs.get(a1).get(a2);
             collabs.get(a1).remove(a2);
-            collabs.get(a2).add(a1);
+            collabs.get(a2).put(a1, number);
         } else {
+            int number = collabs.get(a1).get(a2);
             collabs.get(a2).remove(a1);
-            collabs.get(a1).add(a2);
+            collabs.get(a1).put(a2, number);
         }
     }
 
@@ -95,7 +97,7 @@ public class HopcroftKarpGraph {
         return maleActors;
     }
 
-    public Map<Actor, Set<Actor>> getCollabs() {
+    public Map<Actor, Map<Actor, Integer>> getCollabs() {
         return collabs;
     }
 
