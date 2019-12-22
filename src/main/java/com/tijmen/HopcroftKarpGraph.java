@@ -1,6 +1,4 @@
-package com.tijmen.hopcroftkarp;
-
-import com.tijmen.Actor;
+package com.tijmen;
 
 import java.util.*;
 

@@ -1,7 +1,4 @@
-package com.tijmen.minmax;
-
-import com.tijmen.Actor;
-import com.tijmen.Player;
+package com.tijmen;
 
 import java.util.*;
 import java.util.stream.Collectors;

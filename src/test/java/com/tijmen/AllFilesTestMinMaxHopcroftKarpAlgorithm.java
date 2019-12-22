@@ -1,7 +1,5 @@
 package com.tijmen;
 
-import com.tijmen.minmax.MinMaxAlgorithm;
-import com.tijmen.minmax.MinMaxParser;
 import org.junit.Test;
 
 import java.io.File;

@@ -1,6 +1,4 @@
-package com.tijmen.minmax;
-
-import com.tijmen.Actor;
+package com.tijmen;
 
 import java.util.Objects;
 import java.util.Set;

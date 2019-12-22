@@ -1,8 +1,5 @@
 package com.tijmen;
 
-import com.tijmen.hopcroftkarp.HopcroftKarpAlgorithm;
-import com.tijmen.hopcroftkarp.HopcroftKarpGraph;
-import com.tijmen.hopcroftkarp.HopcroftKarpParser;
 import org.junit.Test;
 
 import java.io.File;

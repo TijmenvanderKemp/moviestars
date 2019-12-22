@@ -1,6 +1,4 @@
-package com.tijmen.hopcroftkarp;
-
-import com.tijmen.Actor;
+package com.tijmen;
 
 import java.io.InputStream;
 import java.util.HashSet;
@@ -10,8 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class HopcroftKarpParser {
-    public HopcroftKarpGraph parse(InputStream inputMethod) {
+public class MinMaxParser {
+    public MinMaxAlgorithm parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
 
         String s = in.nextLine();
@@ -30,7 +28,7 @@ public class HopcroftKarpParser {
             addCollabs(in, femaleActors, maleActors, allActors, collabs);
         }
 
-        return new HopcroftKarpGraph(femaleActors, maleActors, collabs);
+        return new MinMaxAlgorithm(collabs, femaleActors);
     }
 
     private Set<Actor> getActors(Scanner in, int numberOfActors) {
@@ -55,6 +53,7 @@ public class HopcroftKarpParser {
                 .collect(Collectors.toSet());
 
         femaleCast.forEach(actress -> collabs.get(actress).addAll(maleCast));
+        maleCast.forEach(actor -> collabs.get(actor).addAll(femaleCast));
     }
 
     private Set<Actor> getCast(Scanner in, Set<Actor> allActors, int castSize) {

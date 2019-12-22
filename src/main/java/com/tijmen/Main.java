@@ -1,9 +1,5 @@
 package com.tijmen;
 
-import com.tijmen.hopcroftkarp.HopcroftKarpAlgorithm;
-import com.tijmen.hopcroftkarp.HopcroftKarpGraph;
-import com.tijmen.hopcroftkarp.HopcroftKarpParser;
-
 public final class Main {
     private Main() {
     }

@@ -1,7 +1,4 @@
-package com.tijmen.hopcroftkarp;
-
-import com.tijmen.Actor;
-import com.tijmen.Player;
+package com.tijmen;
 
 import java.util.LinkedList;
 import java.util.Optional;
