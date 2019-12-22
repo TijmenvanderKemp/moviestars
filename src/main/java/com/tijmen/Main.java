@@ -1,8 +1,8 @@
 package com.tijmen;
 
-public final class App
+public final class Main
 {
-    private App() {
+    private Main() {
     }
 
     public static void main( String[] args )
