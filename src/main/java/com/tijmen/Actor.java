@@ -1,12 +1,12 @@
 package com.tijmen;
 
-import java.util.Objects;
-
 public class Actor {
     public String name;
+    public int hashCode;
 
-    public Actor(String name) {
+    public Actor(String name, int customHash) {
         this.name = name;
+        this.hashCode = customHash;
     }
 
     public String getName() {
@@ -16,14 +16,14 @@ public class Actor {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
         Actor actor = (Actor) o;
-        return Objects.equals(name, actor.name);
+        return hashCode == actor.hashCode;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return hashCode;
     }
 
     @Override

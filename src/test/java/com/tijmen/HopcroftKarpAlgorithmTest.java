@@ -17,7 +17,4 @@ public class HopcroftKarpAlgorithmTest {
         assertThat(hopcroftKarpAlgorithm.solve()).isEqualTo(Player.MARK);
     }
 
-    private Actor actor(String name) {
-        return new Actor(name);
-    }
 }
