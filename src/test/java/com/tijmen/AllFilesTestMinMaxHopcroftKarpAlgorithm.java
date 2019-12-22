@@ -1,15 +1,20 @@
 package com.tijmen;
 
+import com.tijmen.minmax.MinMaxAlgorithm;
+import com.tijmen.minmax.MinMaxParser;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AllFilesTestAlgorithmByItself {
+public class AllFilesTestMinMaxHopcroftKarpAlgorithm {
     @Test
     public void testAlleOfficieleFiles() {
         File inFolder = new File(TestFile.getAsUrl("samples/in/").getPath());
@@ -28,7 +33,7 @@ public class AllFilesTestAlgorithmByItself {
     private void test(Pair<File, File> inAndOut) {
         try {
             System.out.println("Testing " + inAndOut.getLeft().getName());
-            AlgorithmByItself algorithm = getProblem(inAndOut);
+            MinMaxAlgorithm algorithm = getProblem(inAndOut);
             String solution = getSolution(inAndOut);
             testSolve(algorithm, solution);
         } catch (FileNotFoundException e) {
@@ -36,13 +41,13 @@ public class AllFilesTestAlgorithmByItself {
         }
     }
 
-    private void testSolve(AlgorithmByItself algorithm, String solution) {
+    private void testSolve(MinMaxAlgorithm algorithm, String solution) {
         Player victor = algorithm.solve();
         assertThat(victor.getName()).isEqualTo(solution);
     }
 
-    private AlgorithmByItself getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
-        return new AlgorithmParser().parse(new FileInputStream(inAndOut.getLeft()));
+    private MinMaxAlgorithm getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
+        return new MinMaxParser().parse(new FileInputStream(inAndOut.getLeft()));
     }
 
     private String getSolution(Pair<File, File> inAndOut) throws FileNotFoundException {
