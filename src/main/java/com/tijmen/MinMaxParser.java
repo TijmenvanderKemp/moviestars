@@ -16,8 +16,8 @@ public class MinMaxParser {
         String[] actorsAndMovies = s.split(" ");
         int numberOfActors = Integer.parseInt(actorsAndMovies[0]);
         int numberOfMovies = Integer.parseInt(actorsAndMovies[1]);
-        Set<Actor> femaleActors = getActors(in, numberOfActors);
-        Set<Actor> maleActors = getActors(in, numberOfActors);
+        Set<Actor> femaleActors = getActors(in, numberOfActors, 0);
+        Set<Actor> maleActors = getActors(in, numberOfActors, numberOfActors);
 
         Set<Actor> allActors = new HashSet<>(femaleActors);
         allActors.addAll(maleActors);
@@ -31,11 +31,15 @@ public class MinMaxParser {
         return new MinMaxAlgorithm(collabs, femaleActors);
     }
 
-    private Set<Actor> getActors(Scanner in, int numberOfActors) {
-        return IntStream.range(0, numberOfActors).boxed()
-                .map(integer -> in.nextLine())
-                .map(Actor::new)
-                .collect(Collectors.toSet());
+    private Set<Actor> getActors(Scanner in, int numberOfActors, int startOfHash) {
+        // TODO TK
+        Set<Actor> set = new HashSet<>();
+        for (int i = 0; i < numberOfActors; i++) {
+            String name = in.nextLine();
+            Actor actor = new Actor(name, startOfHash + i);
+            set.add(actor);
+        }
+        return set;
     }
 
     private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors, Set<Actor> allActors,

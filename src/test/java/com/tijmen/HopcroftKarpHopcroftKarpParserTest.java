@@ -11,17 +11,17 @@ public class HopcroftKarpHopcroftKarpParserTest {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
         HopcroftKarpGraph graph = new HopcroftKarpParser().parse(asStream);
 
-        ActorSetAssert.assertThat(graph.getCollabs().get(actor("MelanieLaurent")))
+        ActorSetAssert.assertThat(graph.getCollabs().get(actor("MelanieLaurent", 1)))
                 .containsExactlyInAnyOrder("BradPitt");
-        ActorSetAssert.assertThat(graph.getCollabs().get(actor("BradPitt"))).containsExactlyInAnyOrder();
-        ActorSetAssert.assertThat(graph.getCollabs().get(actor("NormanReedus")))
+        ActorSetAssert.assertThat(graph.getCollabs().get(actor("BradPitt", 2))).containsExactlyInAnyOrder();
+        ActorSetAssert.assertThat(graph.getCollabs().get(actor("NormanReedus", 3)))
                 .containsExactlyInAnyOrder();
-        ActorSetAssert.assertThat(graph.getCollabs().get(actor("DianaKruger")))
+        ActorSetAssert.assertThat(graph.getCollabs().get(actor("DianaKruger", 0)))
                 .containsExactlyInAnyOrder("BradPitt", "NormanReedus");
     }*/
 
-    private Actor actor(String name) {
-        return new Actor(name);
+    private Actor actor(String name, int hash) {
+        return new Actor(name, hash);
     }
 
 }

@@ -3,9 +3,11 @@ package com.tijmen;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class HopcroftKarpParser {
+
+    private Map<String, Integer> customHashes = new HashMap<>();
+
     public HopcroftKarpGraph parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
 
@@ -13,8 +15,8 @@ public class HopcroftKarpParser {
         String[] actorsAndMovies = s.split(" ");
         int numberOfActors = Integer.parseInt(actorsAndMovies[0]);
         int numberOfMovies = Integer.parseInt(actorsAndMovies[1]);
-        Set<Actor> femaleActors = getActors(in, numberOfActors);
-        Set<Actor> maleActors = getActors(in, numberOfActors);
+        Set<Actor> femaleActors = getActors(in, numberOfActors, 0);
+        Set<Actor> maleActors = getActors(in, numberOfActors, numberOfActors);
 
         Set<Actor> allActors = new HashSet<>(femaleActors);
         allActors.addAll(maleActors);
@@ -28,11 +30,16 @@ public class HopcroftKarpParser {
         return new HopcroftKarpGraph(femaleActors, maleActors, collabs);
     }
 
-    private Set<Actor> getActors(Scanner in, int numberOfActors) {
-        return IntStream.range(0, numberOfActors).boxed()
-                .map(integer -> in.nextLine())
-                .map(Actor::new)
-                .collect(Collectors.toSet());
+    private Set<Actor> getActors(Scanner in, int numberOfActors, int startOfHash) {
+        Set<Actor> set = new HashSet<>();
+        for (int i = 0; i < numberOfActors; i++) {
+            Integer integer = i;
+            String name = in.nextLine();
+            Actor actor = new Actor(name, startOfHash + i);
+            customHashes.put(name, startOfHash + i);
+            set.add(actor);
+        }
+        return set;
     }
 
     private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors,
@@ -67,7 +74,7 @@ public class HopcroftKarpParser {
         Set<Actor> set = new HashSet<>();
         for (int i = 0; i < castSize; i++) {
             String name = in.nextLine();
-            set.add(new Actor(name));
+            set.add(new Actor(name, customHashes.get(name)));
         }
         return set;
     }
