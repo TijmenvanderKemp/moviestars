@@ -1,20 +1,24 @@
-package com.tijmen;
+package com.tijmen.hopcroftkarp;
 
-import java.util.*;
+import com.tijmen.Actor;
+import com.tijmen.Player;
 
-public class Algorithm {
-    private Graph graph;
+import java.util.LinkedList;
+import java.util.Optional;
 
-    Algorithm(Graph graph) {
+public class HopcroftKarpAlgorithm {
+    private HopcroftKarpGraph graph;
+
+    public HopcroftKarpAlgorithm(HopcroftKarpGraph graph) {
         this.graph = graph;
     }
 
     public Player solve() {
-    Optional<LinkedList<Actor>> augmentingPath = graph.augmentingPathExists();
-    while(augmentingPath.isPresent()) {
-        graph.augmentGraph(augmentingPath.get());
-        augmentingPath = graph.augmentingPathExists();
-    }
+        Optional<LinkedList<Actor>> augmentingPath = graph.findAugmentingPath();
+        while (augmentingPath.isPresent()) {
+            graph.augmentGraph(augmentingPath.get());
+            augmentingPath = graph.findAugmentingPath();
+        }
 
     if(graph.getFreeWomen().isEmpty()) {
         return Player.MARK;

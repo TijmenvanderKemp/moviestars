@@ -1,5 +1,8 @@
 package com.tijmen;
 
+import com.tijmen.hopcroftkarp.HopcroftKarpAlgorithm;
+import com.tijmen.hopcroftkarp.HopcroftKarpGraph;
+import com.tijmen.hopcroftkarp.HopcroftKarpParser;
 import org.junit.Test;
 
 import java.io.File;
@@ -12,7 +15,7 @@ import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AllFilesTestAlgorithm {
+public class AllFilesTestHopcroftKarpAlgorithm {
     @Test
     public void testAlleOfficieleFiles() {
         File inFolder = new File(TestFile.getAsUrl("samples/in/").getPath());
@@ -31,21 +34,21 @@ public class AllFilesTestAlgorithm {
     private void test(Pair<File, File> inAndOut) {
         try {
             System.out.println("Testing " + inAndOut.getLeft().getName());
-            Algorithm algorithm = new Algorithm(getProblem(inAndOut));
+            HopcroftKarpAlgorithm hopcroftKarpAlgorithm = new HopcroftKarpAlgorithm(getProblem(inAndOut));
             String solution = getSolution(inAndOut);
-            testSolve(algorithm, solution);
+            testSolve(hopcroftKarpAlgorithm, solution);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void testSolve(Algorithm algorithm, String solution) {
-        Player victor = algorithm.solve();
+    private void testSolve(HopcroftKarpAlgorithm hopcroftKarpAlgorithm, String solution) {
+        Player victor = hopcroftKarpAlgorithm.solve();
         assertThat(victor.getName()).isEqualTo(solution);
     }
 
-    private Graph getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
-        return new GraphParser().parse(new FileInputStream(inAndOut.getLeft()));
+    private HopcroftKarpGraph getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
+        return new HopcroftKarpParser().parse(new FileInputStream(inAndOut.getLeft()));
     }
 
     private String getSolution(Pair<File, File> inAndOut) throws FileNotFoundException {

@@ -1,12 +1,17 @@
-package com.tijmen;
+package com.tijmen.minmax;
+
+import com.tijmen.Actor;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class AlgorithmParser {
-    public AlgorithmByItself parse(InputStream inputMethod) {
+public class MinMaxParser {
+    public MinMaxAlgorithm parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
 
         String s = in.nextLine();
@@ -25,14 +30,14 @@ public class AlgorithmParser {
             addCollabs(in, femaleActors, maleActors, allActors, collabs);
         }
 
-        return new AlgorithmByItself(collabs, femaleActors);
+        return new MinMaxAlgorithm(collabs, femaleActors);
     }
 
     private Set<Actor> getActors(Scanner in, int numberOfActors) {
         return IntStream.range(0, numberOfActors).boxed()
                 .map(integer -> in.nextLine())
                 .map(Actor::new)
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 
     private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors, Set<Actor> allActors,
@@ -59,6 +64,6 @@ public class AlgorithmParser {
                 .map(name -> allActors.stream()
                         .filter(actor -> name.equals(actor.name))
                         .findFirst().orElseThrow(() -> new IllegalStateException("acteurs niet goed ingelezen")))
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 }

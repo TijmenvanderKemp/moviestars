@@ -1,4 +1,6 @@
-package com.tijmen;
+package com.tijmen.hopcroftkarp;
+
+import com.tijmen.Actor;
 
 import java.io.InputStream;
 import java.util.HashSet;
@@ -8,8 +10,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class GraphParser {
-    public Graph parse(InputStream inputMethod) {
+public class HopcroftKarpParser {
+    public HopcroftKarpGraph parse(InputStream inputMethod) {
         Scanner in = new Scanner(inputMethod);
 
         String s = in.nextLine();
@@ -28,14 +30,14 @@ public class GraphParser {
             addCollabs(in, femaleActors, maleActors, allActors, collabs);
         }
 
-        return new Graph(femaleActors, maleActors, collabs);
+        return new HopcroftKarpGraph(femaleActors, maleActors, collabs);
     }
 
     private Set<Actor> getActors(Scanner in, int numberOfActors) {
         return IntStream.range(0, numberOfActors).boxed()
                 .map(integer -> in.nextLine())
                 .map(Actor::new)
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 
     private void addCollabs(Scanner in, Set<Actor> femaleActors, Set<Actor> maleActors, Set<Actor> allActors,
@@ -61,6 +63,6 @@ public class GraphParser {
                 .map(name -> allActors.stream()
                         .filter(actor -> name.equals(actor.name))
                         .findFirst().orElseThrow(() -> new IllegalStateException("acteurs niet goed ingelezen")))
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 }

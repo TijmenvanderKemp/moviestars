@@ -1,15 +1,17 @@
-package com.tijmen;
+package com.tijmen.hopcroftkarp;
+
+import com.tijmen.Actor;
 
 import java.util.*;
 
-public class Graph {
+public class HopcroftKarpGraph {
     private Set<Actor> femaleActors; // left side
     private Set<Actor> maleActors; // right side
     private Set<Actor> freeWomen; // Women not part of the maximal matching
     private Set<Actor> freeMen; // Men not part of the maximal matching
     private Map<Actor, Set<Actor>> collabs; // edges
 
-    public Graph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
+    public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
         this.femaleActors = femaleActors;
         this.maleActors = maleActors;
         this.collabs = collabs;
@@ -17,26 +19,26 @@ public class Graph {
         freeWomen = new HashSet<>(femaleActors);
     }
 
-    public Optional<LinkedList<Actor>> augmentingPathExists() {
+    public Optional<LinkedList<Actor>> findAugmentingPath() {
 
         // breadth first search until a free man is encountered. return that free man if found, return empty optional otherwise.
 
-        Queue<Actor> queue = new LinkedList(freeWomen);
-        Map<Actor, Actor> parent = new HashMap<>();
-        for( Actor woman : freeWomen) {
-            parent.put(woman, null);
+        Queue<Actor> queue = new LinkedList<>(freeWomen);
+        Map<Actor, Actor> predecessors = new HashMap<>();
+        for (Actor woman : freeWomen) {
+            predecessors.put(woman, null);
         }
-        while( !queue.isEmpty() ) {
+        while (!queue.isEmpty()) {
             Actor actor = queue.remove();
             Set<Actor> coworkers = collabs.get(actor);
-            for(Actor coworker : coworkers) {
-                if(freeMen.contains(coworker)) {
+            for (Actor coworker : coworkers) {
+                if (freeMen.contains(coworker)) {
                     // create the augmenting path if a free man is found
-                    parent.put(coworker, actor);
-                    return Optional.of(createAugmentingPath(parent, coworker));
+                    predecessors.put(coworker, actor);
+                    return Optional.of(createAugmentingPath(predecessors, coworker));
                 }
-                if(!parent.containsKey(coworker)) {
-                    parent.put(coworker, actor);
+                if (!predecessors.containsKey(coworker)) {
+                    predecessors.put(coworker, actor);
                     queue.add(coworker);
                 }
             }
@@ -44,12 +46,12 @@ public class Graph {
         return Optional.empty();
     }
 
-    private LinkedList<Actor> createAugmentingPath(Map<Actor, Actor> parentMap, Actor finalChild) {
+    private LinkedList<Actor> createAugmentingPath(Map<Actor, Actor> predecessors, Actor finalChild) {
         LinkedList<Actor> augmentingPath = new LinkedList<>();
         Actor child = finalChild;
-        while(child != null) {
+        while (child != null) {
             augmentingPath.add(child);
-            child = parentMap.get(child);
+            child = predecessors.get(child);
         }
         return augmentingPath;
     }
@@ -103,7 +105,7 @@ public class Graph {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Graph that = (Graph) o;
+        HopcroftKarpGraph that = (HopcroftKarpGraph) o;
         return Objects.equals(femaleActors, that.femaleActors) &&
                 Objects.equals(maleActors, that.maleActors) &&
                 Objects.equals(freeWomen, that.freeWomen) &&

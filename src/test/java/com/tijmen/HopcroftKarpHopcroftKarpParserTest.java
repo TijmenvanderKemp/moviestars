@@ -1,17 +1,17 @@
 package com.tijmen;
 
+import com.tijmen.hopcroftkarp.HopcroftKarpGraph;
+import com.tijmen.hopcroftkarp.HopcroftKarpParser;
 import org.junit.Test;
 
 import java.io.InputStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class GraphParserTest {
+public class HopcroftKarpHopcroftKarpParserTest {
 
     @Test
     public void test() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
-        Graph graph = new GraphParser().parse(asStream);
+        HopcroftKarpGraph graph = new HopcroftKarpParser().parse(asStream);
 
         ActorSetAssert.assertThat(graph.getCollabs().get(actor("MelanieLaurent")))
                 .containsExactlyInAnyOrder("BradPitt");

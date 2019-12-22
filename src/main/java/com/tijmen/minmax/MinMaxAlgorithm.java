@@ -1,15 +1,18 @@
-package com.tijmen;
+package com.tijmen.minmax;
+
+import com.tijmen.Actor;
+import com.tijmen.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AlgorithmByItself {
-    private Map<SubProblem, Player>  encountered;
+public class MinMaxAlgorithm {
+    private Map<SubProblem, Player> encountered;
     private Map<Actor, Set<Actor>> collabs;
     private Set<Actor> firstOptions;
     private Set<Actor> picked;
 
-    AlgorithmByItself(Map<Actor, Set<Actor>> collabs, Set<Actor> firstOptions) {
+    MinMaxAlgorithm(Map<Actor, Set<Actor>> collabs, Set<Actor> firstOptions) {
         this.collabs = collabs;
         this.firstOptions = firstOptions;
         encountered = new HashMap<>();
