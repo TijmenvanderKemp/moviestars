@@ -21,10 +21,15 @@ public class HopcroftKarpParser {
         Set<Actor> allActors = new HashSet<>(femaleActors);
         allActors.addAll(maleActors);
 
-        Map<Actor, Map<Actor,Integer>> collabs = allActors.stream()
+        Map<Actor, Map<Actor,Integer>> collabCount = allActors.stream()
                 .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
         for (int i = 0; i < numberOfMovies; i++) {
-            addCollabs(in, femaleActors, maleActors, collabs);
+            addCollabs(in, femaleActors, maleActors, collabCount);
+        }
+
+        Map<Actor, Set<Actor>> collabs = new HashMap<>();
+        for (Actor actor : collabCount.keySet()) {
+            collabs.put(actor, new HashSet(collabCount.get(actor).keySet()));
         }
 
         return new HopcroftKarpGraph(femaleActors, maleActors, collabs);

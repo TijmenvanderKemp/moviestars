@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.io.InputStream;
 
 public class HopcroftKarpHopcroftKarpParserTest {
-/*
+
     @Test
     public void test() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
@@ -18,7 +18,7 @@ public class HopcroftKarpHopcroftKarpParserTest {
                 .containsExactlyInAnyOrder();
         ActorSetAssert.assertThat(graph.getCollabs().get(actor("DianaKruger", 0)))
                 .containsExactlyInAnyOrder("BradPitt", "NormanReedus");
-    }*/
+    }
 
     private Actor actor(String name, int hash) {
         return new Actor(name, hash);

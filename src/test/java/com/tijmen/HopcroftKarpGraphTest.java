@@ -18,7 +18,7 @@ public class HopcroftKarpGraphTest {
 
         assertThat(graph.findAugmentingPath().isPresent());
     }
-/*
+
     @Test
     public void augmentGraph() {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
@@ -30,5 +30,5 @@ public class HopcroftKarpGraphTest {
         LinkedList<Actor> augmentingPath2 = graph.findAugmentingPath().get();
         ActorSetAssert.assertThat(new HashSet<>(augmentingPath2)).isNotEqualTo(new HashSet<>(augmentingPath1));
         assertThat(graph.getCollabs().get(firstActor).size() < firstActorOptions.size());
-    }*/
+    }
 }
