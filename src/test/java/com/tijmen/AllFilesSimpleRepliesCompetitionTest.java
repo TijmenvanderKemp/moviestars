@@ -7,8 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class AllFilesSimpleRepliesCompetitionTest {
 
     private String response;
@@ -30,6 +28,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
         }
     }
 
+
     private void test(Pair<File, File> inAndOut) {
         try {
             System.out.println("Testing " + inAndOut.getLeft().getName());
@@ -39,6 +38,11 @@ public class AllFilesSimpleRepliesCompetitionTest {
             runner.run();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (FinalGameState e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getFinalScore().getScoreSoFar());
+            System.out.println(new FileReader(inAndOut.getRight(), null).nextLine());
+            System.out.println("=============");
         }
     }
 

@@ -56,15 +56,15 @@ public class CompetitionRunner {
                     .withScore(score)
                     .withMatching(matching);
 
-            Actor nextMove = strategy.nextMove(context).getLeft();
-            if (nextMove == null) {
+            Pair<Actor, Score> actorScorePair = strategy.nextMove(context);
+            if (actorScorePair == null) {
                 out.println("I give up");
                 break;
             }
-            out.println(nextMove.name);
-            score = score.add(problem.collabCount.get(theirMove).get(nextMove));
+            out.println(actorScorePair.getLeft().name);
+            score = score.add(problem.collabCount.get(theirMove).get(actorScorePair.getLeft()));
             problemOptionsAndMove = waitForOurTurn(problem);
-            if(strategy instanceof FirstMoveWinningStrategyForVeronique) {
+            if (strategy instanceof FirstMoveWinningStrategyForVeronique) {
                 strategy = new StandardWinning();
             }
         }
