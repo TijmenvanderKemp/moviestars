@@ -64,6 +64,9 @@ public class CompetitionRunner {
             out.println(nextMove.name);
             score = score.add(problem.collabCount.get(theirMove).get(nextMove));
             problemOptionsAndMove = waitForOurTurn(problem);
+            if(strategy instanceof FirstMoveWinningStrategyForVeronique) {
+                strategy = new StandardWinning();
+            }
         }
         throw new WeLost(score);
     }
