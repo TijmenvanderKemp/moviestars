@@ -28,15 +28,7 @@ public class ProblemContext {
 
     public ProblemContext withProblem(Problem problem) {
         this.problem = problem;
-        return this;
-    }
-
-    public Map<Actor, Map<Actor, Integer>> getCollabCount() {
-        return collabCount;
-    }
-
-    public ProblemContext withCollabCount(Map<Actor, Map<Actor, Integer>> collabCount) {
-        this.collabCount = collabCount;
+        collabCount = problem.collabCount;
         return this;
     }
 
@@ -85,7 +77,6 @@ public class ProblemContext {
         return new ProblemContext()
                 .withAllowedDepth(allowedDepth)
                 .withProblem(problem)
-                .withCollabCount(collabCount)
                 .withOptions(options)
                 .withTheirMove(theirMove)
                 .withScore(score)
