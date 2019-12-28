@@ -10,6 +10,10 @@ public enum Player {
         this.name = name;
     }
 
+    public static Player parse(String name) {
+        return valueOf(name.toUpperCase());
+    }
+
     public Player next() {
         return this == MARK ? VERONIQUE : MARK;
     }

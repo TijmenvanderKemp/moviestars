@@ -12,7 +12,7 @@ public class HopcroftKarpGraph {
     public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
         this.femaleActors = femaleActors;
         this.maleActors = maleActors;
-        this.collabs = collabs;
+        this.collabs = new HashMap<>(collabs);
         freeMen = new HashSet<>(maleActors);
         freeWomen = new HashSet<>(femaleActors);
     }

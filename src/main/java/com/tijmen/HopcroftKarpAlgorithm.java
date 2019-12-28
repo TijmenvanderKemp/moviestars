@@ -17,11 +17,11 @@ public class HopcroftKarpAlgorithm {
             augmentingPath = graph.findAugmentingPath();
         }
 
-    if(graph.getFreeWomen().isEmpty()) {
-        return Player.MARK;
-    } else {
-        return Player.VERONIQUE;
-    }
+        if (graph.getFreeWomen().isEmpty()) {
+            return Player.MARK;
+        } else {
+            return Player.VERONIQUE;
+        }
         /*
     Hopcroft-Karp algorithm for finding maximal matching in bipartite graph:
     1) Initialize Maximal Matching M as empty.

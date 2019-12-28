@@ -1,5 +1,6 @@
 package com.tijmen;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllFilesTestMinMaxAlgorithm {
     @Test
+    @Ignore
     public void testAlleOfficieleFiles() {
         File inFolder = new File(TestFile.getAsUrl("samples/in/").getPath());
         File[] inFiles = Objects.requireNonNull(inFolder.listFiles());
