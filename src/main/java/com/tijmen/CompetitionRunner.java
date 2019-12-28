@@ -1,5 +1,6 @@
 package com.tijmen;
 
+import java.util.Map;
 import java.util.Set;
 
 public class CompetitionRunner {
@@ -19,9 +20,16 @@ public class CompetitionRunner {
         initialProblem = parser.parse(in);
 
         weAre = determineWhichPlayerWeAre();
-        Pair<Player, HopcroftKarpGraph> solve = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(initialProblem)).solve();
 
-        startPlaying(solve.getRight().getFreeWomen(), solve.getLeft());
+        Pair<Player, HopcroftKarpGraph> solve = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(initialProblem)).solve();
+        Map<Actor, Actor> matching;
+        if(weAre == Player.MARK) {
+            matching = solve.getRight().getF2mMatching();
+        } else {
+            matching = solve.getRight().getM2fMatching();
+        }
+
+        startPlaying(solve.getRight().getFreeWomen(), solve.getLeft(), matching);
     }
 
     private Player determineWhichPlayerWeAre() {
@@ -29,12 +37,12 @@ public class CompetitionRunner {
         return Player.parse(weAre);
     }
 
-    private void startPlaying(Set<Actor> winningOptionsForVeronique, Player victor) {
+    private void startPlaying(Set<Actor> winningOptionsForVeronique, Player victor, Map<Actor, Actor> matching) {
         Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove = waitForOurFirstTurn(initialProblem, winningOptionsForVeronique);
         Strategy strategy = createStrategy(victor);
 
         while (true) {
-            Actor nextMove = strategy.nextMove(1, problemOptionsAndMove, score).getLeft();
+            Actor nextMove = strategy.nextMove(1, problemOptionsAndMove, score, matching, weAre).getLeft();
             if (nextMove == null) {
                 out.println("I give up");
                 throw new WeLost(score);
@@ -71,8 +79,12 @@ public class CompetitionRunner {
 
     Strategy createStrategy(Player victor) {
         if (weAre == victor) {
-            return new FirstMoveWinningStrategyForVeronique();
+            if( weAre == Player.VERONIQUE) {
+                return new FirstMoveWinningStrategyForVeronique();
+            }
+            return new StandardWinning();
         } else {
+
             return new LosingStrategy();
         }
     }

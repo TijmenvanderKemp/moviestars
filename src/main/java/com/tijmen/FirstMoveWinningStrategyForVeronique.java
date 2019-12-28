@@ -1,5 +1,7 @@
 package com.tijmen;
 
+import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
+
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
@@ -13,13 +15,17 @@ public class FirstMoveWinningStrategyForVeronique implements Strategy {
     Actor theirMove;
     Map<Actor, Integer> relevantScores;
     Score score;
+    Map<Actor, Actor> matching;
+    Player player;
 
     @Override
-    public Pair<Actor, Score> nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, Score score) {
+    public Pair<Actor, Score> nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, Score score, Map<Actor, Actor> matching, Player player) {
         // Calculate cumulative average of our playing lines
         // Find the minimum average at each line
         // Pick line with highest minimum
         this.allowedDepth = allowedDepth;
+        this.matching = matching;
+        this.player = player;
         problem = problemOptionsAndMove.getLeft();
         collabCount = problem.collabCount;
         options = problemOptionsAndMove.getMiddle();
@@ -54,6 +60,6 @@ public class FirstMoveWinningStrategyForVeronique implements Strategy {
                 new Triple<>(problem.withoutActor(option),
                         SetUtils.remove(problem.collabs.get(option), option),
                         option),
-                score.add(relevantScores.get(option)));
+                score.add(relevantScores.get(option)), matching, player);
     }
 }
