@@ -14,7 +14,7 @@ public class HopcroftKarpAlgorithmTest {
         InputStream asStream = TestFile.getAsStream("samples/in/a1.in");
         HopcroftKarpGraph graph = HopcroftKarpGraph.of(new HopcroftKarpParser().parse(asStream));
         HopcroftKarpAlgorithm hopcroftKarpAlgorithm = new HopcroftKarpAlgorithm(graph);
-        assertThat(hopcroftKarpAlgorithm.solve()).isEqualTo(Player.MARK);
+        assertThat(hopcroftKarpAlgorithm.solve().getLeft()).isEqualTo(Player.MARK);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.tijmen;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HopcroftKarpGraph {
     private Set<Actor> femaleActors; // left side
@@ -8,6 +9,7 @@ public class HopcroftKarpGraph {
     private Set<Actor> freeWomen; // Women not part of the maximal matching
     private Set<Actor> freeMen; // Men not part of the maximal matching
     private Map<Actor, Set<Actor>> collabs; // edges
+    private Map<Actor, Actor> matching;
 
     public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
         this.femaleActors = femaleActors;
@@ -104,6 +106,10 @@ public class HopcroftKarpGraph {
         return collabs;
     }
 
+    public Map<Actor, Actor> getMatching() {
+        return matching;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,5 +125,11 @@ public class HopcroftKarpGraph {
     @Override
     public int hashCode() {
         return Objects.hash(femaleActors, maleActors, freeWomen, freeMen, collabs);
+    }
+
+    public void calculateMatching() {
+        matching = collabs.entrySet().stream()
+                .filter(entry -> entry.getValue().size() == 1)
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().iterator().next()));
     }
 }

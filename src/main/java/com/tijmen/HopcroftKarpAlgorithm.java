@@ -10,17 +10,19 @@ public class HopcroftKarpAlgorithm {
         this.graph = graph;
     }
 
-    public Player solve() {
+    public Pair<Player, HopcroftKarpGraph> solve() {
         Optional<LinkedList<Actor>> augmentingPath = graph.findAugmentingPath();
         while (augmentingPath.isPresent()) {
             graph.augmentGraph(augmentingPath.get());
             augmentingPath = graph.findAugmentingPath();
         }
 
+        graph.calculateMatching();
+
         if (graph.getFreeWomen().isEmpty()) {
-            return Player.MARK;
+            return new Pair<>(Player.MARK, graph);
         } else {
-            return Player.VERONIQUE;
+            return new Pair<>(Player.VERONIQUE, graph);
         }
         /*
     Hopcroft-Karp algorithm for finding maximal matching in bipartite graph:

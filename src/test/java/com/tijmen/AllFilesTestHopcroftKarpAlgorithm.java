@@ -40,7 +40,7 @@ public class AllFilesTestHopcroftKarpAlgorithm {
     }
 
     private void testSolve(HopcroftKarpAlgorithm hopcroftKarpAlgorithm, String solution) {
-        Player victor = hopcroftKarpAlgorithm.solve();
+        Player victor = hopcroftKarpAlgorithm.solve().getLeft();
         assertThat(victor.getName()).isEqualTo(solution);
     }
 

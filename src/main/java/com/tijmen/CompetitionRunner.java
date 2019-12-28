@@ -61,7 +61,8 @@ public class CompetitionRunner {
     }
 
     private Strategy computeStrategy(Player weAre, Problem problem) {
-        Player victor = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(problem)).solve();
+        Pair<Player, HopcroftKarpGraph> solve = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(problem)).solve();
+        Player victor = solve.getLeft();
         return createStrategy(weAre, victor);
     }
 

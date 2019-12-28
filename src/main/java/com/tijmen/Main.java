@@ -8,7 +8,7 @@ public final class Main {
         HopcroftKarpParser parser = new HopcroftKarpParser();
         Problem problem = parser.parse(System.in);
         HopcroftKarpGraph graph = HopcroftKarpGraph.of(problem);
-        Player victor = new HopcroftKarpAlgorithm(graph).solve();
+        Player victor = new HopcroftKarpAlgorithm(graph).solve().getLeft();
         System.out.println(victor.getName());
     }
 }
