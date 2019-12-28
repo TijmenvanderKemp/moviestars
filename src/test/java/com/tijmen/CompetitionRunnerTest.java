@@ -30,7 +30,7 @@ public class CompetitionRunnerTest {
         }
 
         @Override
-        Strategy createStrategy(Player weAre, Player victor) {
+        Strategy createStrategy(Player victor) {
             return new FakeStrategy();
         }
     }
