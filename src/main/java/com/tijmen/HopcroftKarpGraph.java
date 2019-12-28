@@ -9,7 +9,7 @@ public class HopcroftKarpGraph {
     private Set<Actor> freeWomen; // Women not part of the maximal matching
     private Set<Actor> freeMen; // Men not part of the maximal matching
     private Map<Actor, Set<Actor>> collabs; // edges
-    private Map<Actor, Actor> matching;
+    private Map<Actor, Actor> m2fMatching;
 
     public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Map<Actor, Set<Actor>> collabs) {
         this.femaleActors = femaleActors;
@@ -106,8 +106,8 @@ public class HopcroftKarpGraph {
         return collabs;
     }
 
-    public Map<Actor, Actor> getMatching() {
-        return matching;
+    public Map<Actor, Actor> getM2fMatching() {
+        return m2fMatching;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class HopcroftKarpGraph {
     }
 
     public void calculateMatching() {
-        matching = collabs.entrySet().stream()
+        m2fMatching = collabs.entrySet().stream()
                 .filter(entry -> entry.getValue().size() == 1)
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().iterator().next()));
     }
