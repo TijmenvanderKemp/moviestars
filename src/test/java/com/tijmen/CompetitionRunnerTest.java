@@ -22,6 +22,19 @@ public class CompetitionRunnerTest {
         assertThat(writer.responses).containsExactly("BradPitt", "NormanReedus");
     }
 
+    @Test
+    public void testWithStrategies() {
+        OutputStub writer = new OutputStub();
+        CompetitionRunner runner = new CompetitionRunner(new InputStub(), writer);
+        try {
+            runner.run();
+        } catch (WeWon weWon) {
+            // Do nothing, the external program will have terminated our program
+            assertThat(weWon.getFinalScore().getScoreSoFar()).isEqualTo(1d);
+        }
+        assertThat(writer.responses).containsExactly("BradPitt", "NormanReedus");
+    }
+
     private static class CompetitionRunnerStub extends CompetitionRunner {
 
         public CompetitionRunnerStub(Reader reader, Writer writer) {
@@ -35,6 +48,7 @@ public class CompetitionRunnerTest {
     }
 
     private static class FakeStrategy implements Strategy {
+
         @Override
         public Pair<Actor, Score> nextMove(ProblemContext context) {
             switch (context.getTheirMove().name) {
@@ -70,6 +84,13 @@ public class CompetitionRunnerTest {
         @Override
         public String nextLine() {
             return moves.get(counter++);
+        }
+    }
+
+    private static class AnyAdjacentActor implements Reader {
+        @Override
+        public String nextLine() {
+            return null;
         }
     }
 
