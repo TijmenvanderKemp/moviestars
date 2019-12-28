@@ -23,7 +23,7 @@ public class CompetitionRunner {
 
         Pair<Player, HopcroftKarpGraph> solve = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(initialProblem)).solve();
         Map<Actor, Actor> matching;
-        if(weAre == Player.MARK) {
+        if (weAre == Player.MARK) {
             matching = solve.getRight().getF2mMatching();
         } else {
             matching = solve.getRight().getM2fMatching();
@@ -39,19 +39,33 @@ public class CompetitionRunner {
 
     private void startPlaying(Set<Actor> winningOptionsForVeronique, Player victor, Map<Actor, Actor> matching) {
         Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove = waitForOurFirstTurn(initialProblem, winningOptionsForVeronique);
+        Problem problem;
+        Set<Actor> options;
+        Actor theirMove;
         Strategy strategy = createStrategy(victor);
 
         while (true) {
-            Actor nextMove = strategy.nextMove(1, problemOptionsAndMove, score, matching, weAre).getLeft();
+            problem = problemOptionsAndMove.getLeft();
+            options = problemOptionsAndMove.getMiddle();
+            theirMove = problemOptionsAndMove.getRight();
+            ProblemContext context = new ProblemContext()
+                    .withProblem(problem)
+                    .withOptions(options)
+                    .withTheirMove(theirMove)
+                    .withAllowedDepth(1)
+                    .withScore(score)
+                    .withMatching(matching);
+
+            Actor nextMove = strategy.nextMove(context).getLeft();
             if (nextMove == null) {
                 out.println("I give up");
-                throw new WeLost(score);
+                break;
             }
             out.println(nextMove.name);
-            Actor theirMove = problemOptionsAndMove.getRight();
-            score = score.add(problemOptionsAndMove.getLeft().collabCount.get(theirMove).get(nextMove));
-            problemOptionsAndMove = waitForOurTurn(problemOptionsAndMove.getLeft());
+            score = score.add(problem.collabCount.get(theirMove).get(nextMove));
+            problemOptionsAndMove = waitForOurTurn(problem);
         }
+        throw new WeLost(score);
     }
 
     private Triple<Problem, Set<Actor>, Actor> waitForOurFirstTurn(Problem problem, Set<Actor> winningOptions) {
@@ -79,7 +93,7 @@ public class CompetitionRunner {
 
     Strategy createStrategy(Player victor) {
         if (weAre == victor) {
-            if( weAre == Player.VERONIQUE) {
+            if (weAre == Player.VERONIQUE) {
                 return new FirstMoveWinningStrategyForVeronique();
             }
             return new StandardWinning();

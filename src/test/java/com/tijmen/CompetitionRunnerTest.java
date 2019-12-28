@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,12 +36,12 @@ public class CompetitionRunnerTest {
 
     private static class FakeStrategy implements Strategy {
         @Override
-        public Pair<Actor, Score> nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, Score score) {
-            switch (problemOptionsAndMove.getRight().name) {
+        public Pair<Actor, Score> nextMove(ProblemContext context) {
+            switch (context.getTheirMove().name) {
                 case "MelanieLaurent":
-                    return new Pair<>(problemOptionsAndMove.getLeft().actorRepository.getByName("BradPitt"), score);
+                    return new Pair<>(context.getProblem().actorRepository.getByName("BradPitt"), null);
                 case "DianaKruger":
-                    return new Pair<>(problemOptionsAndMove.getLeft().actorRepository.getByName("NormanReedus"), score);
+                    return new Pair<>(context.getProblem().actorRepository.getByName("NormanReedus"), null);
                 default:
                     return null;
             }

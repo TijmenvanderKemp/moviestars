@@ -78,7 +78,7 @@ public class HopcroftKarpGraph {
     }
 
     private void switchDirections(Actor a1, Actor a2) {
-        if(collabs.get(a1).contains(a2)) {
+        if (collabs.get(a1).contains(a2)) {
             collabs.get(a1).remove(a2);
             collabs.get(a2).add(a1);
         } else {
@@ -133,9 +133,10 @@ public class HopcroftKarpGraph {
     }
 
     public void calculateMatching() {
-        m2fMatching = collabs.entrySet().stream()
-                .filter(entry -> entry.getValue().size() == 1)
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().iterator().next()));
+        Set<Actor> occupiedMen = new HashSet<>(maleActors);
+        occupiedMen.removeAll(freeMen);
+        m2fMatching = occupiedMen.stream().collect(Collectors.toMap(
+                occupiedMan -> occupiedMan, occupiedMan -> collabs.get(occupiedMan).iterator().next()));
 
         f2mMatching = m2fMatching.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
     }
