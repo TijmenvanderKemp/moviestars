@@ -35,4 +35,7 @@ public class HopcroftKarpAlgorithm {
 
     }
 
+    public HopcroftKarpGraph getGraph() {
+        return graph;
+    }
 }
