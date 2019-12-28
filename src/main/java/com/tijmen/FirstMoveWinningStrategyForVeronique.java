@@ -5,17 +5,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class WinningStrategy implements Strategy {
+public class FirstMoveWinningStrategyForVeronique implements Strategy {
     int allowedDepth;
     Problem problem;
     Map<Actor, Map<Actor, Integer>> collabCount;
     Set<Actor> options;
     Actor theirMove;
     Map<Actor, Integer> relevantScores;
-    PlayingLineValue score;
+    Score score;
 
     @Override
-    public Actor nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, PlayingLineValue score) {
+    public Pair<Actor, Score> nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, Score score) {
         // Calculate cumulative average of our playing lines
         // Find the minimum average at each line
         // Pick line with highest minimum
@@ -30,7 +30,7 @@ public class WinningStrategy implements Strategy {
         relevantScores = collabCount.get(theirMove);
         this.score = score;
 
-        Optional<Actor> bestOption = getBestMove();
+        Optional<Pair<Actor, Score>> bestOption = getBestMove().map(actor -> new Pair<>(actor, score.add(relevantScores.get(actor))));
         return bestOption.orElse(null);
     }
 
@@ -39,12 +39,16 @@ public class WinningStrategy implements Strategy {
             return options.stream()
                     .max(Comparator.comparing(relevantScores::get));
         }
+
         return options.stream()
-                .map(this::getBestMoveForTheOtherPlayer)
-                .max(Comparator.comparing(relevantScores::get));
+                .max(Comparator.comparing(actor -> getBesteScore(actor).getScoreSoFar()));
     }
 
-    private Actor getBestMoveForTheOtherPlayer(Actor option) {
+    private Score getBesteScore(Actor actor) {
+        return getBestMoveForTheOtherPlayer(actor).getRight();
+    }
+
+    private Pair<Actor, Score> getBestMoveForTheOtherPlayer(Actor option) {
         return new LosingStrategy().nextMove(
                 allowedDepth - 1,
                 new Triple<>(problem.withoutActor(option),

@@ -1,7 +1,7 @@
 package com.tijmen;
 
 public class WeWon extends FinalGameState {
-    public WeWon(PlayingLineValue score) {
+    public WeWon(Score score) {
         super(score);
     }
 }

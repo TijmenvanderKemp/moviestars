@@ -5,7 +5,7 @@ import java.util.Set;
 public class CompetitionRunner {
     private final Reader in;
     private final Writer out;
-    private PlayingLineValue score = new PlayingLineValue();
+    private Score score = new Score();
 
     public CompetitionRunner(Reader reader, Writer writer) {
         this.in = reader;
@@ -25,7 +25,7 @@ public class CompetitionRunner {
         Strategy strategy = computeStrategy(weAre, problem);
 
         while (true) {
-            Actor nextMove = strategy.nextMove(1, problemOptionsAndMove, score);
+            Actor nextMove = strategy.nextMove(1, problemOptionsAndMove, score).getLeft();
             if (nextMove == null) {
                 out.println("I give up");
                 throw new WeLost(score);
@@ -68,7 +68,7 @@ public class CompetitionRunner {
 
     Strategy createStrategy(Player weAre, Player victor) {
         if (weAre == victor) {
-            return new WinningStrategy();
+            return new FirstMoveWinningStrategyForVeronique();
         } else {
             return new LosingStrategy();
         }

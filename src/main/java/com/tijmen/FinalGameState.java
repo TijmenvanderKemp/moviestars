@@ -1,13 +1,13 @@
 package com.tijmen;
 
 public class FinalGameState extends RuntimeException {
-    private PlayingLineValue finalScore;
+    private Score finalScore;
 
-    public FinalGameState(PlayingLineValue score) {
+    public FinalGameState(Score score) {
         finalScore = score;
     }
 
-    public PlayingLineValue getFinalScore() {
+    public Score getFinalScore() {
         return finalScore;
     }
 }

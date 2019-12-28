@@ -37,12 +37,12 @@ public class CompetitionRunnerTest {
 
     private static class FakeStrategy implements Strategy {
         @Override
-        public Actor nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, PlayingLineValue score) {
+        public Pair<Actor, Score> nextMove(int allowedDepth, Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove, Score score) {
             switch (problemOptionsAndMove.getRight().name) {
                 case "MelanieLaurent":
-                    return problemOptionsAndMove.getLeft().actorRepository.getByName("BradPitt");
+                    return new Pair<>(problemOptionsAndMove.getLeft().actorRepository.getByName("BradPitt"), score);
                 case "DianaKruger":
-                    return problemOptionsAndMove.getLeft().actorRepository.getByName("NormanReedus");
+                    return new Pair<>(problemOptionsAndMove.getLeft().actorRepository.getByName("NormanReedus"), score);
                 default:
                     return null;
             }
