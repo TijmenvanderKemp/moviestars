@@ -62,13 +62,21 @@ public class CompetitionRunner {
                 break;
             }
             out.println(actorScorePair.getLeft().name);
-            score = score.add(problem.collabCount.get(theirMove).get(actorScorePair.getLeft()));
+            score = calculateScoreOfOurMove(problem, theirMove, actorScorePair.getLeft());
             problemOptionsAndMove = waitForOurTurn(problem);
             if (strategy instanceof FirstMoveWinningStrategyForVeronique) {
                 strategy = new StandardWinning();
             }
         }
         throw new WeLost(score);
+    }
+
+    private Score calculateScoreOfOurMove(Problem problem, Actor theirMove, Actor ourMove) {
+        if (problem.collabCount.get(theirMove) == null) {
+            // Dit is de allereerste move dus er zit geen score aan die move.
+            return score;
+        }
+        return score.add(problem.collabCount.get(theirMove).get(ourMove));
     }
 
     private Triple<Problem, Set<Actor>, Actor> waitForOurFirstTurn(Problem problem, Set<Actor> winningOptions) {
