@@ -92,10 +92,9 @@ public class CompetitionRunner {
             throw new WeWon(score);
         }
         Actor theirMoveActor = problem.actorRepository.getByName(theirMove);
-        problem.collabs.ignore(theirMoveActor);
         Set<Actor> ourOptions = problem.collabs.get(theirMoveActor);
-        Problem newProblem = problem.withoutActor(theirMoveActor);
-        return new Triple<>(newProblem, ourOptions, theirMoveActor);
+        problem.collabs.ignore(theirMoveActor);
+        return new Triple<>(problem, ourOptions, theirMoveActor);
     }
 
     private String waitForMove() {

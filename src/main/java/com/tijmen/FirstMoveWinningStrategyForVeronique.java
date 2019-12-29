@@ -41,7 +41,7 @@ public class FirstMoveWinningStrategyForVeronique implements Strategy {
         collabs.ignore(option);
         Pair<Actor, Score> moveFromLosingStrategy = new LosingStrategy().nextMove(context.copy()
                 .withAllowedDepth(context.getAllowedDepth() - 1)
-                .withProblem(context.getProblem().withoutActor(option))
+                .withProblem(context.getProblem())
                 .withOptions(collabs.get(option))
                 .withTheirMove(option)
                 .withScore(context.getScore()));
