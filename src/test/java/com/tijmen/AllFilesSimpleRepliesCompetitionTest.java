@@ -106,7 +106,9 @@ public class AllFilesSimpleRepliesCompetitionTest {
                 return "Mark";
             }
             if(response == null) {
-                return problem.actorRepository.femaleActors.iterator().next().name;
+                Actor actor = problem.actorRepository.femaleActors.iterator().next();
+                saidActors.add(actor);
+                return actor.name;
             }
 
             Actor responseActor = new Actor(response, problem.actorRepository.customHashes.get(response));
