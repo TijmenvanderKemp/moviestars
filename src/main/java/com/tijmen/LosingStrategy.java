@@ -39,12 +39,16 @@ public class LosingStrategy implements Strategy {
     }
 
     private Pair<Actor, Score> getBestMoveForTheOtherPlayer(Actor option) {
-        return new StandardWinning().nextMove(context.copy()
+        Collabs collabs = context.getProblem().collabs;
+        collabs.ignore(option);
+        Pair<Actor, Score> winningStrategyNextMove = new StandardWinning().nextMove(context.copy()
                 .withAllowedDepth(context.getAllowedDepth() - 1)
                 .withProblem(context.getProblem().withoutActor(option))
-                .withOptions(SetUtils.remove(context.getProblem().hopcroftKarpCollabs.get(option), option))
+                .withOptions(collabs.get(option))
                 .withTheirMove(option)
                 .withScore(getScoreOfOption(option).map(context.getScore()::add).orElse(context.getScore())));
+        collabs.acknowledge(option);
+        return winningStrategyNextMove;
 
     }
 

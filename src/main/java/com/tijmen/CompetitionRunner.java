@@ -39,15 +39,12 @@ public class CompetitionRunner {
 
     private void startPlaying(Set<Actor> winningOptionsForVeronique, Player victor, Map<Actor, Actor> matching) {
         Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove = waitForOurFirstTurn(initialProblem, winningOptionsForVeronique);
-        Problem problem;
-        Set<Actor> options;
-        Actor theirMove;
         Strategy strategy = createStrategy(victor);
 
         while (true) {
-            problem = problemOptionsAndMove.getLeft();
-            options = problemOptionsAndMove.getMiddle();
-            theirMove = problemOptionsAndMove.getRight();
+            Problem problem = problemOptionsAndMove.getLeft();
+            Set<Actor> options = problemOptionsAndMove.getMiddle();
+            Actor theirMove = problemOptionsAndMove.getRight();
             ProblemContext context = new ProblemContext()
                     .withProblem(problem)
                     .withOptions(options)
@@ -61,8 +58,10 @@ public class CompetitionRunner {
                 out.println("I give up");
                 break;
             }
-            out.println(actorScorePair.getLeft().name);
-            score = calculateScoreOfOurMove(problem, theirMove, actorScorePair.getLeft());
+            Actor ourMove = actorScorePair.getLeft();
+            out.println(ourMove.name);
+            problem.collabs.ignore(ourMove);
+            score = calculateScoreOfOurMove(problem, theirMove, ourMove);
             problemOptionsAndMove = waitForOurTurn(problem);
             if (strategy instanceof FirstMoveWinningStrategyForVeronique) {
                 strategy = new StandardWinning();
@@ -93,7 +92,8 @@ public class CompetitionRunner {
             throw new WeWon(score);
         }
         Actor theirMoveActor = problem.actorRepository.getByName(theirMove);
-        Set<Actor> ourOptions = problem.hopcroftKarpCollabs.get(theirMoveActor);
+        problem.collabs.ignore(theirMoveActor);
+        Set<Actor> ourOptions = problem.collabs.get(theirMoveActor);
         Problem newProblem = problem.withoutActor(theirMoveActor);
         return new Triple<>(newProblem, ourOptions, theirMoveActor);
     }

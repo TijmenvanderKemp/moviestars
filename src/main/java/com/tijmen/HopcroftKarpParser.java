@@ -34,8 +34,9 @@ public class HopcroftKarpParser {
 
         Map<Actor, Map<Actor, Integer>> collabCount = allActors.stream()
                 .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
+        Collabs collabs = new Collabs(allActors);
         for (int i = 0; i < numberOfMovies; i++) {
-            addCollabs(collabCount);
+            addCollabs(collabCount, collabs);
         }
 
         Map<Actor, Set<Actor>> hopcroftKarpCollabs = actorRepository.getAllActors().stream()
@@ -44,7 +45,7 @@ public class HopcroftKarpParser {
             hopcroftKarpCollabs.put(actor, new HashSet<>(collabCount.get(actor).keySet()));
         }
 
-        return new Problem(actorRepository, hopcroftKarpCollabs, collabCount);
+        return new Problem(actorRepository, hopcroftKarpCollabs, collabCount, collabs);
     }
 
     private Set<Actor> getActors(int numberOfActors, int startOfHash) {
@@ -58,7 +59,7 @@ public class HopcroftKarpParser {
         return set;
     }
 
-    private void addCollabs(Map<Actor, Map<Actor, Integer>> collabs) {
+    private void addCollabs(Map<Actor, Map<Actor, Integer>> collabCount, Collabs collabs) {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
@@ -73,16 +74,18 @@ public class HopcroftKarpParser {
 
 
         for (Actor actress : femaleCast) {
-            Map<Actor, Integer> collabsWithActress = collabs.get(actress);
+            Map<Actor, Integer> collabsWithActress = collabCount.get(actress);
             for(Actor actor : maleCast) {
-                Map<Actor, Integer> collabsWithActor = collabs.get(actor);
-                if(collabsWithActress.containsKey(actor)) {
+                collabs.add(actress, actor);
+
+                Map<Actor, Integer> collabsWithActor = collabCount.get(actor);
+                if (collabsWithActress.containsKey(actor)) {
                     int number = collabsWithActress.get(actor);
                     collabsWithActress.put(actor, number + 1);
                 } else {
                     collabsWithActress.put(actor, 1);
                 }
-                if(collabsWithActor.containsKey(actress)) {
+                if (collabsWithActor.containsKey(actress)) {
                     int number = collabsWithActor.get(actress);
                     collabsWithActor.put(actress, number + 1);
                 } else {
