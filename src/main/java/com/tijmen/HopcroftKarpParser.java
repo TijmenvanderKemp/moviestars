@@ -38,12 +38,13 @@ public class HopcroftKarpParser {
             addCollabs(collabCount);
         }
 
-        Map<Actor, Set<Actor>> collabs = new HashMap<>();
-        for (Actor actor : collabCount.keySet()) {
-            collabs.put(actor, new HashSet<>(collabCount.get(actor).keySet()));
+        Map<Actor, Set<Actor>> hopcroftKarpCollabs = actorRepository.maleActors.stream()
+                .collect(Collectors.toMap(actor -> actor, actor -> new HashSet<>()));
+        for (Actor actor : actorRepository.femaleActors) {
+            hopcroftKarpCollabs.put(actor, new HashSet<>(collabCount.get(actor).keySet()));
         }
 
-        return new Problem(actorRepository, collabs, collabCount);
+        return new Problem(actorRepository, hopcroftKarpCollabs, collabCount);
     }
 
     private Set<Actor> getActors(int numberOfActors, int startOfHash) {
