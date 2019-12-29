@@ -26,6 +26,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
 
         for (Pair<File, File> inAndOut : insAndOuts) {
             test(inAndOut);
+            response = null;
         }
     }
 
@@ -102,7 +103,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
             }
             if (firstTime) {
                 firstTime = false;
-                return "Veronique";
+                return "Mark";
             }
             if(response == null) {
                 return problem.actorRepository.femaleActors.iterator().next().name;

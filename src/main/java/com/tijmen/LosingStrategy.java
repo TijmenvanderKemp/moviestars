@@ -42,7 +42,7 @@ public class LosingStrategy implements Strategy {
         return new StandardWinning().nextMove(context.copy()
                 .withAllowedDepth(context.getAllowedDepth() - 1)
                 .withProblem(context.getProblem().withoutActor(option))
-                .withOptions(SetUtils.remove(context.getProblem().collabs.get(option), option))
+                .withOptions(SetUtils.remove(context.getProblem().hopcroftKarpCollabs.get(option), option))
                 .withTheirMove(option)
                 .withScore(getScoreOfOption(option).map(context.getScore()::add).orElse(context.getScore())));
 

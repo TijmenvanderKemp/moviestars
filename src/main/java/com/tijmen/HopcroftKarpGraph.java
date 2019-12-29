@@ -22,7 +22,7 @@ public class HopcroftKarpGraph {
 
 
     public static HopcroftKarpGraph of(Problem problem) {
-        return new HopcroftKarpGraph(problem.actorRepository.femaleActors, problem.actorRepository.maleActors, problem.collabs);
+        return new HopcroftKarpGraph(problem.actorRepository.femaleActors, problem.actorRepository.maleActors, problem.hopcroftKarpCollabs);
     }
 
     public Optional<LinkedList<Actor>> findAugmentingPath() {

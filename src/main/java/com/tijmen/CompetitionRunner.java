@@ -93,7 +93,7 @@ public class CompetitionRunner {
             throw new WeWon(score);
         }
         Actor theirMoveActor = problem.actorRepository.getByName(theirMove);
-        Set<Actor> ourOptions = problem.collabs.get(theirMoveActor);
+        Set<Actor> ourOptions = problem.hopcroftKarpCollabs.get(theirMoveActor);
         Problem newProblem = problem.withoutActor(theirMoveActor);
         return new Triple<>(newProblem, ourOptions, theirMoveActor);
     }
