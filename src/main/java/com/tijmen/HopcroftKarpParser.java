@@ -74,11 +74,18 @@ public class HopcroftKarpParser {
         for (Actor actress : femaleCast) {
             Map<Actor, Integer> collabsWithActress = collabs.get(actress);
             for(Actor actor : maleCast) {
+                Map<Actor, Integer> collabsWithActor = collabs.get(actor);
                 if(collabsWithActress.containsKey(actor)) {
                     int number = collabsWithActress.get(actor);
                     collabsWithActress.put(actor, number + 1);
                 } else {
                     collabsWithActress.put(actor, 1);
+                }
+                if(collabsWithActor.containsKey(actress)) {
+                    int number = collabsWithActor.get(actress);
+                    collabsWithActor.put(actress, number + 1);
+                } else {
+                    collabsWithActor.put(actress, 1);
                 }
             }
         }
