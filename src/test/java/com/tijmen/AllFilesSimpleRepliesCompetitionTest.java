@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AllFilesSimpleRepliesCompetitionTest {
 
@@ -79,11 +80,13 @@ public class AllFilesSimpleRepliesCompetitionTest {
         Scanner scanner;
         private Map<Actor, Set<Actor>> collabs;
         boolean firstTime;
+        Set<Actor> saidActors;
 
         public FileReader(File fileName, Map<Actor, Set<Actor>> collabs) {
             this.fileName = fileName;
             this.collabs = collabs;
             firstTime = true;
+            saidActors = new HashSet<>();
             try {
                 scanner = new Scanner(new FileInputStream(fileName));
             } catch (FileNotFoundException e) {
@@ -93,19 +96,24 @@ public class AllFilesSimpleRepliesCompetitionTest {
 
         @Override
         public String nextLine() {
-            if(scanner.hasNextLine()) {
+            if (scanner.hasNextLine()) {
                 return scanner.nextLine();
             }
-            if(firstTime) {
+            if (firstTime) {
                 firstTime = false;
                 return "Veronique";
             }
 
-            Set<Actor> options = collabs.get(new Actor(response, problem.actorRepository.customHashes.get(response)));
-            if(options.isEmpty()) {
+            Optional<Actor> option = collabs.get(new Actor(response, problem.actorRepository.customHashes.get(response)))
+                    .stream()
+                    .filter(actor -> !saidActors.contains(actor))
+                    .findFirst();
+            if (!option.isPresent()) {
                 return "I give up";
             }
-            return options.iterator().next().name;
+            saidActors.add(option.get());
+
+            return option.get().name;
         }
     }
 }
