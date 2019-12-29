@@ -20,13 +20,12 @@ public class FirstMoveWinningStrategyForVeronique implements Strategy {
     }
 
     private Pair<Actor, Score> addTheScoreOfTheMove(Actor actor) {
-        return new Pair<>(actor, context.getScore().add(context.getRelevantScores().get(actor)));
+        return new Pair<>(actor, context.getScore());
     }
 
     private Optional<Actor> getBestMove() {
         if (context.getAllowedDepth() <= 1) {
-            return context.getOptions().stream()
-                    .max(Comparator.comparing(context.getRelevantScores()::get));
+            return context.getOptions().stream().findFirst();
         }
 
         return context.getOptions().stream()
@@ -43,6 +42,6 @@ public class FirstMoveWinningStrategyForVeronique implements Strategy {
                 .withProblem(context.getProblem().withoutActor(option))
                 .withOptions(SetUtils.remove(context.getProblem().collabs.get(option), option))
                 .withTheirMove(option)
-                .withScore(context.getScore().add(context.getRelevantScores().get(option))));
+                .withScore(context.getScore()));
     }
 }

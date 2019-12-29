@@ -22,8 +22,12 @@ public class LosingStrategy implements Strategy {
 
     private Optional<Actor> getBestMove() {
         if (context.getAllowedDepth() <= 1) {
-            return context.getOptions().stream()
-                    .min(Comparator.comparing(context.getRelevantScores()::get));
+            if (context.getRelevantScores() != null) {
+                return context.getOptions().stream()
+                        .min(Comparator.comparing(context.getRelevantScores()::get));
+            } else {
+                return context.getOptions().stream().findFirst();
+            }
         }
 
         return context.getOptions().stream()
@@ -40,7 +44,15 @@ public class LosingStrategy implements Strategy {
                 .withProblem(context.getProblem().withoutActor(option))
                 .withOptions(SetUtils.remove(context.getProblem().collabs.get(option), option))
                 .withTheirMove(option)
-                .withScore(context.getScore().add(context.getRelevantScores().get(option)))
-        );
+                .withScore(getScoreOfOption(option).map(context.getScore()::add).orElse(context.getScore())));
+
+    }
+
+    private Optional<Integer> getScoreOfOption(Actor option) {
+        if (context.getRelevantScores() == null) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(context.getRelevantScores().get(option));
+        }
     }
 }
