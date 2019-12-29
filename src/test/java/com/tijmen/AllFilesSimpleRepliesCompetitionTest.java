@@ -72,6 +72,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
         @Override
         public void println(String string) {
             response = string;
+            System.out.println(string);
         }
     }
 
@@ -103,16 +104,22 @@ public class AllFilesSimpleRepliesCompetitionTest {
                 firstTime = false;
                 return "Veronique";
             }
+            if(response == null) {
+                return problem.actorRepository.femaleActors.iterator().next().name;
+            }
 
-            Optional<Actor> option = collabs.get(new Actor(response, problem.actorRepository.customHashes.get(response)))
+            Actor responseActor = new Actor(response, problem.actorRepository.customHashes.get(response));
+            Optional<Actor> option = problem.collabCount.get(responseActor).keySet()
                     .stream()
                     .filter(actor -> !saidActors.contains(actor))
                     .findFirst();
             if (!option.isPresent()) {
+                System.out.println("I give up");
                 return "I give up";
             }
             saidActors.add(option.get());
 
+            System.out.println(option.get().name);
             return option.get().name;
         }
     }
