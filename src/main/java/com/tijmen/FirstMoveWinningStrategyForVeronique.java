@@ -33,6 +33,10 @@ public class FirstMoveWinningStrategyForVeronique implements Strategy {
     }
 
     private Score getBesteScore(Actor actor) {
+        Pair<Actor, Score> best = getBestMoveForTheOtherPlayer(actor);
+        if(best == null) {
+            return context.getScore();
+        }
         return getBestMoveForTheOtherPlayer(actor).getRight();
     }
 

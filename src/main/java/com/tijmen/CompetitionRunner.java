@@ -23,7 +23,7 @@ public class CompetitionRunner {
 
         Pair<Player, HopcroftKarpGraph> solve = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(initialProblem)).solve();
         Map<Actor, Actor> matching;
-        if (weAre == Player.MARK) {
+        if (weAre == Player.MARK || solve.getLeft() == Player.MARK) {
             matching = solve.getRight().getF2mMatching();
         } else {
             matching = solve.getRight().getM2fMatching();
@@ -49,7 +49,7 @@ public class CompetitionRunner {
                     .withProblem(problem)
                     .withOptions(options)
                     .withTheirMove(theirMove)
-                    .withAllowedDepth(1)
+                    .withAllowedDepth(5)
                     .withScore(score)
                     .withMatching(matching);
 
@@ -82,6 +82,9 @@ public class CompetitionRunner {
         if (weAre == Player.MARK) {
             return waitForOurTurn(problem);
         } else {
+            if (winningOptions.isEmpty()) {
+                return new Triple<>(problem, problem.actorRepository.femaleActors, null);
+            }
             return new Triple<>(problem, winningOptions, null);
         }
     }
