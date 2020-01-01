@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AllFilesSimpleRepliesCompetitionTest {
 
@@ -73,7 +72,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
         @Override
         public void println(String string) {
             response = string;
-            System.out.println(string);
+//            System.out.println(string);
         }
     }
 
@@ -122,7 +121,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
             }
             saidActors.add(option.get());
 
-            System.out.println(option.get().name);
+//            System.out.println(option.get().name);
             return option.get().name;
         }
     }

@@ -10,6 +10,9 @@ public class HopcroftKarpAlgorithm {
         this.graph = graph;
     }
 
+    /**
+     * @return (winning player, graph)
+     */
     public Pair<Player, HopcroftKarpGraph> solve() {
         Optional<LinkedList<Actor>> augmentingPath = graph.findAugmentingPath();
         while (augmentingPath.isPresent()) {

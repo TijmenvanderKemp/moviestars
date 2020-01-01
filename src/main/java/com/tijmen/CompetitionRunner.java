@@ -3,12 +3,13 @@ package com.tijmen;
 import java.util.Map;
 import java.util.Set;
 
-public class CompetitionRunner {
+public class CompetitionRunner extends Thread {
     private final Reader in;
     private final Writer out;
     private Score score;
     private Player weAre;
     private Problem initialProblem;
+    private volatile boolean alive = true;
 
     public CompetitionRunner(Reader reader, Writer writer) {
         this.in = reader;
@@ -42,7 +43,7 @@ public class CompetitionRunner {
         Triple<Problem, Set<Actor>, Actor> problemOptionsAndMove = waitForOurFirstTurn(initialProblem, winningOptionsForVeronique);
         Strategy strategy = createStrategy(victor);
 
-        while (true) {
+        while (alive) {
             Problem problem = problemOptionsAndMove.getLeft();
             Set<Actor> options = problemOptionsAndMove.getMiddle();
             Actor theirMove = problemOptionsAndMove.getRight();
@@ -114,5 +115,9 @@ public class CompetitionRunner {
         } else {
             return new LosingStrategy();
         }
+    }
+
+    public void stopThread() {
+        alive = false;
     }
 }
