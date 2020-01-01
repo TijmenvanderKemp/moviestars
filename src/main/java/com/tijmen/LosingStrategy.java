@@ -32,7 +32,7 @@ public class LosingStrategy implements Strategy {
 
         Optional<Pair<Actor, Double>> min = context.getOptions().stream()
                 .map(actor -> new Pair<>(actor, getBesteScore(actor).getScoreSoFar()))
-                .min(Comparator.comparing(pair -> pair.getRight()));
+                .min(Comparator.comparing(Pair::getRight));
         Optional<Actor> bestActor = Optional.empty();
         if(min.isPresent()) {
             double scoreSoFar = context.getScore().getScoreSoFar();

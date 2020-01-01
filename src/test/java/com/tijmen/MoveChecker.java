@@ -35,6 +35,8 @@ public class MoveChecker {
         if (!problem.collabCount.get(getActor(previousMove)).containsKey(getActor(move))) {
             illegalMove(player, move);
         }
+        chosenActors.add(move);
+        previousMove = move;
     }
 
     private Actor getActor(String name) {
