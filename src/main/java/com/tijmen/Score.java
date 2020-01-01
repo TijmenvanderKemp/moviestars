@@ -3,8 +3,10 @@ package com.tijmen;
 public class Score {
     private double scoreSoFar = 0d;
     private int weight = 0;
+    private int initialMaxScore;
 
-    public Score() {
+    public Score(int initialMaxScore) {
+        this.initialMaxScore = initialMaxScore;
     }
 
     private Score(double scoreSoFar, int weight) {
@@ -17,7 +19,7 @@ public class Score {
     }
 
     public double getScoreSoFar() {
-        return scoreSoFar;
+        return scoreSoFar == 0 ? initialMaxScore : scoreSoFar;
     }
 
     int getWeight() {

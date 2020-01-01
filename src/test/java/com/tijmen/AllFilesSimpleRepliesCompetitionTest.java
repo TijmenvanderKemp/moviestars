@@ -111,7 +111,7 @@ public class AllFilesSimpleRepliesCompetitionTest {
                 return actor.name;
             }
 
-            Actor responseActor = new Actor(response, problem.actorRepository.customHashes.get(response));
+            Actor responseActor = problem.actorRepository.getByName(response);
             Optional<Actor> option = problem.collabCount.get(responseActor).keySet()
                     .stream()
                     .filter(actor -> !saidActors.contains(actor))

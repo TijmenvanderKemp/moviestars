@@ -6,7 +6,7 @@ import java.util.Set;
 public class CompetitionRunner {
     private final Reader in;
     private final Writer out;
-    private Score score = new Score();
+    private Score score;
     private Player weAre;
     private Problem initialProblem;
 
@@ -19,11 +19,12 @@ public class CompetitionRunner {
         HopcroftKarpParser parser = new HopcroftKarpParser();
         initialProblem = parser.parse(in);
 
+        score = new Score(initialProblem.actorRepository.maleActors.size());
         weAre = determineWhichPlayerWeAre();
 
         Pair<Player, HopcroftKarpGraph> solve = new HopcroftKarpAlgorithm(HopcroftKarpGraph.of(initialProblem)).solve();
         Map<Actor, Actor> matching;
-        if (weAre == Player.MARK || solve.getLeft() == Player.MARK) {
+        if (solve.getLeft() == Player.MARK) {
             matching = solve.getRight().getF2mMatching();
         } else {
             matching = solve.getRight().getM2fMatching();
@@ -49,7 +50,7 @@ public class CompetitionRunner {
                     .withProblem(problem)
                     .withOptions(options)
                     .withTheirMove(theirMove)
-                    .withAllowedDepth(5)
+                    .withAllowedDepth(3)
                     .withScore(score)
                     .withMatching(matching);
 
@@ -111,7 +112,6 @@ public class CompetitionRunner {
             }
             return new StandardWinning();
         } else {
-
             return new LosingStrategy();
         }
     }

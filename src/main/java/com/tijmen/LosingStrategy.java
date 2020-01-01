@@ -30,13 +30,13 @@ public class LosingStrategy implements Strategy {
             }
         }
 
-        Optional<Pair<Actor, Double>> min = context.getOptions().stream()
-                .map(actor -> new Pair<>(actor, getBesteScore(actor).getScoreSoFar()))
-                .min(Comparator.comparing(pair -> pair.getRight()));
+        Optional<Pair<Actor, Score>> min = context.getOptions().stream()
+                .map(actor -> getBestMoveForTheOtherPlayer(actor))
+                .min(Comparator.comparing(pair -> pair.getRight().getScoreSoFar()));
         Optional<Actor> bestActor = Optional.empty();
         if(min.isPresent()) {
             double scoreSoFar = context.getScore().getScoreSoFar();
-            if( scoreSoFar == 0 ||  min.get().getRight() < scoreSoFar ) {
+            if( scoreSoFar == 0 ||  min.get().getRight().getScoreSoFar() < scoreSoFar ) {
                 bestActor = Optional.of(min.get().getLeft());
             }
         }
@@ -44,6 +44,10 @@ public class LosingStrategy implements Strategy {
     }
 
     private Score getBesteScore(Actor actor) {
+        Pair<Actor, Score> best = getBestMoveForTheOtherPlayer(actor);
+        if(best == null) {
+            return context.getScore();
+        }
         return getBestMoveForTheOtherPlayer(actor).getRight();
     }
 
