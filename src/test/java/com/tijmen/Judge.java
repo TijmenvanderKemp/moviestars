@@ -37,8 +37,12 @@ public class Judge {
         veronique = new CompetitionRunner(veroniqueReader, veroniqueWriter);
         mark = new CompetitionRunner(markReader, markWriter);
 
-        veronique.start();
-        mark.start();
+        try {
+            veronique.start();
+            mark.start();
+        } catch (WeLost w) {
+            // stil laten doodgaan
+        }
 
         try {
             String firstMove = judgeReaderFromVeronique.nextLine();
@@ -110,7 +114,7 @@ public class Judge {
 
         @Override
         public void println(String string) {
-            System.out.println(player.getName() + " has written something: " + string);
+            System.out.println(player.getName() + ": " + string);
             data.send(string);
         }
     }

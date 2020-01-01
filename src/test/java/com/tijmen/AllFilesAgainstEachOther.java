@@ -35,6 +35,7 @@ public class AllFilesAgainstEachOther {
 
 
     private void test(File in, File out) {
+        System.out.println("=====================");
         System.out.println("Testing " + in.getName());
         String solution = null;
         solution = getSolution(out);

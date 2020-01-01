@@ -69,7 +69,9 @@ public class CompetitionRunner extends Thread {
                 strategy = new StandardWinning();
             }
         }
-        throw new WeLost(score);
+        if (alive) {
+            throw new WeLost(score);
+        }
     }
 
     private Score calculateScoreOfOurMove(Problem problem, Actor theirMove, Actor ourMove) {

@@ -26,6 +26,9 @@ public class MoveChecker {
     }
 
     public void checkMove(Player player, String move) {
+        if (problem.actorRepository.getAllActors().stream().map(Actor::getName).noneMatch(move::equals)) {
+            illegalMove(player, move);
+        }
         if (chosenActors.contains(move)) {
             illegalMove(player, move);
         }
