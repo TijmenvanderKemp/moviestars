@@ -39,13 +39,7 @@ public class HopcroftKarpParser {
             addCollabs(collabCount, collabs);
         }
 
-        Map<Actor, Set<Actor>> hopcroftKarpCollabs = actorRepository.getAllActors().stream()
-                .collect(Collectors.toMap(actor -> actor, actor -> new HashSet<>()));
-        for (Actor actor : actorRepository.femaleActors) {
-            hopcroftKarpCollabs.put(actor, new HashSet<>(collabCount.get(actor).keySet()));
-        }
-
-        return new Problem(actorRepository, hopcroftKarpCollabs, collabCount, collabs);
+        return new Problem(actorRepository, collabCount, collabs);
     }
 
     private Set<Actor> getActors(int numberOfActors, int startOfHash) {

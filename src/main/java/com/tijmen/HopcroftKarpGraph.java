@@ -52,7 +52,6 @@ public class HopcroftKarpGraph {
         for (Actor woman : freeWomen) {
             partitioning.put(woman, 1);
         }
-        int partitionCounter = 2;
         while (!queue.isEmpty()) {
             Pair<Actor, Integer> actorAndDepth = queue.remove();
             Actor actor = actorAndDepth.getLeft();
@@ -62,10 +61,9 @@ public class HopcroftKarpGraph {
             for (Actor coworker : coworkers) {
                 if (!partitioning.containsKey(coworker) && hasToBeMatching == matching[actor.hashCode][coworker.hashCode]) {
                     queue.add(new Pair<>(coworker, depth + 1));
-                    partitioning.put(coworker, partitionCounter);
+                    partitioning.put(coworker, depth + 1);
                 }
             }
-            partitionCounter++;
         }
         return partitioning;
     }
@@ -80,7 +78,7 @@ public class HopcroftKarpGraph {
             int depth = actorAndDepth.getRight();
             Set<Actor> coworkers = collabs.get(actor);
             for(Actor coworker : coworkers) {
-                if (!encounteredActors.contains(coworker) && partitioning.get(coworker) == depth + 1) {
+                if (!encounteredActors.contains(coworker) && partitioning.containsKey(coworker) && partitioning.get(coworker) == depth + 1) {
                     encounteredActors.add(coworker);
                     predecessors.put(coworker, actor);
                     if (freeMen.contains(coworker)) {
