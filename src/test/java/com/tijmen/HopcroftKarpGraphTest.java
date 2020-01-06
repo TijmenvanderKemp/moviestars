@@ -3,9 +3,6 @@ package com.tijmen;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,5 +29,13 @@ public class HopcroftKarpGraphTest {
         ActorSetAssert.assertThat(new HashSet<>(augmentingPath2)).isNotEqualTo(new HashSet<>(augmentingPath1));
         assertThat(graph.getCollabs().get(firstActor).size() < firstActorOptions.size()).isTrue();
          */
+    }
+
+    @Test
+    public void testPartitioning() {
+//        Set<Actor> fs = Stream.of(new Actor("A", 1), new Actor("B", 2)).collect(Collectors.toSet());
+//        Set<Actor> ms = Stream.of(new Actor("A", 1), new Actor("B", 2)).collect(Collectors.toSet());
+//
+//        new HopcroftKarpGraph()
     }
 }
