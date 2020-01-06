@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class HopcroftKarpParser {
 
-    private ActorRepository actorRepository = new ActorRepository();
+    private final ActorRepository actorRepository = new ActorRepository();
     private Reader in;
 
     public Problem parse(InputStream inputMethod) {
@@ -75,24 +75,17 @@ public class HopcroftKarpParser {
 
         for (Actor actress : femaleCast) {
             Map<Actor, Integer> collabsWithActress = collabCount.get(actress);
-            for(Actor actor : maleCast) {
+            for (Actor actor : maleCast) {
                 collabs.add(actress, actor);
-
                 Map<Actor, Integer> collabsWithActor = collabCount.get(actor);
-                if (collabsWithActress.containsKey(actor)) {
-                    int number = collabsWithActress.get(actor);
-                    collabsWithActress.put(actor, number + 1);
-                } else {
-                    collabsWithActress.put(actor, 1);
-                }
-                if (collabsWithActor.containsKey(actress)) {
-                    int number = collabsWithActor.get(actress);
-                    collabsWithActor.put(actress, number + 1);
-                } else {
-                    collabsWithActor.put(actress, 1);
-                }
+                collabsWithActress.compute(actor, this::increaseOrDefault1);
+                collabsWithActor.compute(actress, this::increaseOrDefault1);
             }
         }
+    }
+
+    private int increaseOrDefault1(Actor actor, Integer numberOfCollabs) {
+        return numberOfCollabs != null ? numberOfCollabs + 1 : 1;
     }
 
     private Set<Actor> getCast(int castSize) {

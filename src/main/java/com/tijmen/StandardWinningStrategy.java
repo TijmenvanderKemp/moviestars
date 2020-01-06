@@ -1,11 +1,11 @@
 package com.tijmen;
 
-public class StandardWinning implements Strategy {
+public class StandardWinningStrategy implements Strategy {
 
     @Override
     public Pair<Actor, Score> nextMove(ProblemContext context) {
         Actor moveDieIkGaDoen = context.getMatching().get(context.getTheirMove());
-        if(moveDieIkGaDoen == null && !context.getOptions().isEmpty()) {
+        if (moveDieIkGaDoen == null && !context.getOptions().isEmpty()) {
             moveDieIkGaDoen = context.getOptions().iterator().next();
         } else if (moveDieIkGaDoen == null) {
             return null;

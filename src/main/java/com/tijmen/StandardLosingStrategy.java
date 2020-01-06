@@ -3,7 +3,7 @@ package com.tijmen;
 import java.util.Comparator;
 import java.util.Optional;
 
-public class LosingStrategy implements Strategy {
+public class StandardLosingStrategy implements Strategy {
     private ProblemContext context;
 
     @Override
@@ -54,7 +54,7 @@ public class LosingStrategy implements Strategy {
     private Pair<Actor, Score> getBestMoveForTheOtherPlayer(Actor option) {
         Collabs collabs = context.getProblem().collabs;
         collabs.ignore(option);
-        Pair<Actor, Score> winningStrategyNextMove = new StandardWinning().nextMove(context.copy()
+        Pair<Actor, Score> winningStrategyNextMove = new StandardWinningStrategy().nextMove(context.copy()
                 .withAllowedDepth(context.getAllowedDepth() - 1)
                 .withProblem(context.getProblem())
                 .withOptions(collabs.get(option))

@@ -13,10 +13,6 @@ import java.util.Scanner;
 
 public class AllFilesAgainstEachOther {
 
-    private String response;
-    private Problem problem;
-
-
     @Test
     public void testAlleOfficieleFiles() {
         File inFolder = new File(TestFile.getAsUrl("samples/in/").getPath());
@@ -29,7 +25,6 @@ public class AllFilesAgainstEachOther {
 
         for (Pair<File, File> inAndOut : insAndOuts) {
             test(inAndOut.getLeft(), inAndOut.getRight());
-            response = null;
         }
     }
 
@@ -37,8 +32,7 @@ public class AllFilesAgainstEachOther {
     private void test(File in, File out) {
         System.out.println("=====================");
         System.out.println("Testing " + in.getName());
-        String solution = null;
-        solution = getSolution(out);
+        String solution = getSolution(out);
         try {
             new Judge(in, solution);
         } catch (FileNotFoundException e) {
@@ -46,19 +40,14 @@ public class AllFilesAgainstEachOther {
         }
     }
 
-    private HopcroftKarpGraph getProblem(File in) throws FileNotFoundException {
-        problem = new HopcroftKarpParser().parse(new FileInputStream(in));
-        return HopcroftKarpGraph.of(problem);
-    }
-
     private String getSolution(File out) {
-        FileInputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(out);
+            FileInputStream inputStream = new FileInputStream(out);
+            return new Scanner(inputStream).nextLine();
         } catch (FileNotFoundException e) {
             Assertions.fail("Outputfile was not found.");
+            return null;
         }
-        return new Scanner(inputStream).nextLine();
     }
 
     public <A, B> List<Pair<A, B>> zip(A[] lefts, B[] rights) {

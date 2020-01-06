@@ -9,7 +9,7 @@ import java.util.Set;
 public class MoveChecker {
 
     private Problem problem;
-    private Set<String> chosenActors = new HashSet<>();
+    private final Set<String> chosenActors = new HashSet<>();
     private String previousMove;
 
     public MoveChecker(File inFile) throws FileNotFoundException {

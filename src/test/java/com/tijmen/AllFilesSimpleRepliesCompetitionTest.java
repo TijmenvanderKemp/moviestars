@@ -33,27 +33,17 @@ public class AllFilesSimpleRepliesCompetitionTest {
     private void test(Pair<File, File> inAndOut) {
         try {
             System.out.println("Testing " + inAndOut.getLeft().getName());
-            HopcroftKarpGraph graph = getProblem(inAndOut);
-            HopcroftKarpAlgorithm hopcroftKarpAlgorithm = new HopcroftKarpAlgorithm(graph);
-            CompetitionRunner runner = new CompetitionRunner(new FileReader(inAndOut.getLeft(), graph.getCollabs()), new OutputStub());
-            runner.run();
+            problem = new HopcroftKarpParser().parse(new FileInputStream(inAndOut.getLeft()));
+            CompetitionRunner runner = new CompetitionRunner(new FileReader(inAndOut.getLeft()), new OutputStub());
+            runner.start();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (FinalGameState e) {
             System.out.println(e.getClass());
             System.out.println(e.getFinalScore().getScoreSoFar());
-            System.out.println(new FileReader(inAndOut.getRight(), null).nextLine());
+            System.out.println(new FileReader(inAndOut.getRight()).nextLine());
             System.out.println("=============");
         }
-    }
-
-    private HopcroftKarpGraph getProblem(Pair<File, File> inAndOut) throws FileNotFoundException {
-        problem = new HopcroftKarpParser().parse(new FileInputStream(inAndOut.getLeft()));
-        return HopcroftKarpGraph.of(problem);
-    }
-
-    private String getSolution(Pair<File, File> inAndOut) throws FileNotFoundException {
-        return new Scanner(new FileInputStream(inAndOut.getRight())).nextLine();
     }
 
     public <A, B> List<Pair<A, B>> zip(A[] lefts, B[] rights) {
@@ -77,15 +67,13 @@ public class AllFilesSimpleRepliesCompetitionTest {
     }
 
     private class FileReader implements Reader {
-        File fileName;
+        final File fileName;
         Scanner scanner;
-        private Map<Actor, Set<Actor>> collabs;
         boolean firstTime;
-        Set<Actor> saidActors;
+        final Set<Actor> saidActors;
 
-        public FileReader(File fileName, Map<Actor, Set<Actor>> collabs) {
+        public FileReader(File fileName) {
             this.fileName = fileName;
-            this.collabs = collabs;
             firstTime = true;
             saidActors = new HashSet<>();
             try {
@@ -121,7 +109,6 @@ public class AllFilesSimpleRepliesCompetitionTest {
             }
             saidActors.add(option.get());
 
-//            System.out.println(option.get().name);
             return option.get().name;
         }
     }

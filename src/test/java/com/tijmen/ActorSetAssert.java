@@ -16,9 +16,8 @@ public class ActorSetAssert extends AbstractAssert<ActorSetAssert, Set<Actor>> {
         return new ActorSetAssert(actual);
     }
 
-    public ActorSetAssert containsExactlyInAnyOrder(String... names) {
+    public void containsExactlyInAnyOrder(String... names) {
         Set<String> actorNames = actual.stream().map(Actor::getName).collect(Collectors.toSet());
         Assertions.assertThat(actorNames).containsExactlyInAnyOrder(names);
-        return this;
     }
 }

@@ -20,11 +20,4 @@ public class ActorRepository {
         return allActors;
     }
 
-    public ActorRepository remove(Actor actor) {
-        ActorRepository newRepo = new ActorRepository();
-        newRepo.maleActors = SetUtils.remove(maleActors, actor);
-        newRepo.femaleActors = SetUtils.remove(femaleActors, actor);
-        newRepo.customHashes = customHashes;
-        return newRepo;
-    }
 }

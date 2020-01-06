@@ -1,8 +1,8 @@
 package com.tijmen;
 
 public class Pair<A, B> {
-    private A left;
-    private B right;
+    private final A left;
+    private final B right;
 
     public Pair(A left, B right) {
         this.left = left;
@@ -15,5 +15,11 @@ public class Pair<A, B> {
 
     public B getRight() {
         return right;
+    }
+
+    @Override
+    public String toString() {
+        return "left=" + left +
+                "\nright=" + right;
     }
 }

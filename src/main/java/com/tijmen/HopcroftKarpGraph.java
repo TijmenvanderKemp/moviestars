@@ -4,11 +4,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HopcroftKarpGraph {
-    private Set<Actor> femaleActors; // left side
-    private Set<Actor> maleActors; // right side
-    private Set<Actor> freeWomen; // Women not part of the maximal matching
-    private Set<Actor> freeMen; // Men not part of the maximal matching
-    private Map<Actor, Set<Actor>> collabs; // edges
+    private final Set<Actor> femaleActors; // left side
+    private final Set<Actor> maleActors; // right side
+    private final Set<Actor> freeWomen; // Women not part of the maximal matching
+    private final Set<Actor> freeMen; // Men not part of the maximal matching
+    private final Map<Actor, Set<Actor>> collabs; // onedirectional edges
     private Map<Actor, Actor> m2fMatching;
     private Map<Actor, Actor> f2mMatching;
 
@@ -63,7 +63,6 @@ public class HopcroftKarpGraph {
     }
 
     public void augmentGraph(LinkedList<Actor> augmentingPath) {
-
         freeWomen.remove(augmentingPath.getLast());
         freeMen.remove(augmentingPath.getFirst());
 
@@ -74,7 +73,6 @@ public class HopcroftKarpGraph {
             switchDirections(actor1, actor2);
             actor1 = actor2;
         }
-
     }
 
     private void switchDirections(Actor a1, Actor a2) {
@@ -89,18 +87,6 @@ public class HopcroftKarpGraph {
 
     public Set<Actor> getFreeWomen() {
         return freeWomen;
-    }
-
-    public Set<Actor> getFreeMen() {
-        return freeMen;
-    }
-
-    public Set<Actor> getFemaleActors() {
-        return femaleActors;
-    }
-
-    public Set<Actor> getMaleActors() {
-        return maleActors;
     }
 
     public Map<Actor, Set<Actor>> getCollabs() {

@@ -7,8 +7,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Judge {
-    private CompetitionRunner veronique;
-    private CompetitionRunner mark;
+    private final CompetitionRunner veronique;
+    private final CompetitionRunner mark;
 
     private enum ReadingStage {
         PROBLEM,
@@ -78,7 +78,7 @@ public class Judge {
     }
 
     private static class JudgeWriter implements Writer {
-        private Data data;
+        private final Data data;
 
         public JudgeWriter(Data data) {
             this.data = data;
@@ -91,7 +91,7 @@ public class Judge {
     }
 
     private static class JudgeReader implements Reader {
-        private Data data;
+        private final Data data;
 
         public JudgeReader(Data data) {
             this.data = data;
@@ -104,8 +104,8 @@ public class Judge {
     }
 
     private static class PlayerWriter implements Writer {
-        private Player player;
-        private Data data;
+        private final Player player;
+        private final Data data;
 
         public PlayerWriter(Player player, Data data) {
             this.player = player;
@@ -120,9 +120,9 @@ public class Judge {
     }
 
     private static class PlayerReader implements Reader {
-        private Player player;
+        private final Player player;
         private Scanner scanner;
-        private Data data;
+        private final Data data;
         private ReadingStage stage = ReadingStage.PROBLEM;
 
         public PlayerReader(Player player, File in, Data data) {

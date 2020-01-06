@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 // Bidirectional and mutable
 public class Collabs {
-    private Map<Actor, Set<Actor>> collabs;
-    private Set<Actor> ignored = new HashSet<>();
+    private final Map<Actor, Set<Actor>> collabs;
+    private final Set<Actor> ignored = new HashSet<>();
 
     public Collabs(Set<Actor> allActors) {
         collabs = allActors.stream()

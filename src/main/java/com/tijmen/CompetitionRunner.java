@@ -66,7 +66,7 @@ public class CompetitionRunner extends Thread {
             score = calculateScoreOfOurMove(problem, theirMove, ourMove);
             problemOptionsAndMove = waitForOurTurn(problem);
             if (strategy instanceof FirstMoveWinningStrategyForVeronique) {
-                strategy = new StandardWinning();
+                strategy = new StandardWinningStrategy();
             }
         }
         if (alive) {
@@ -113,9 +113,9 @@ public class CompetitionRunner extends Thread {
             if (weAre == Player.VERONIQUE) {
                 return new FirstMoveWinningStrategyForVeronique();
             }
-            return new StandardWinning();
+            return new StandardWinningStrategy();
         } else {
-            return new LosingStrategy();
+            return new StandardLosingStrategy();
         }
     }
 

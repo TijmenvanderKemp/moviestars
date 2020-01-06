@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class ReaderImpl implements Reader {
-    Scanner scanner;
+    final Scanner scanner;
 
     public ReaderImpl() {
         this.scanner = new Scanner(System.in);

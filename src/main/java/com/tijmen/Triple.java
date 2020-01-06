@@ -1,9 +1,9 @@
 package com.tijmen;
 
 public class Triple<A, B, C> {
-    private A left;
-    private B middle;
-    private C right;
+    private final A left;
+    private final B middle;
+    private final C right;
 
     public Triple(A left, B middle, C right) {
         this.left = left;

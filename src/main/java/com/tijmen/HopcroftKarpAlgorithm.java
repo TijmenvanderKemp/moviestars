@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 public class HopcroftKarpAlgorithm {
-    private HopcroftKarpGraph graph;
+    private final HopcroftKarpGraph graph;
 
     public HopcroftKarpAlgorithm(HopcroftKarpGraph graph) {
         this.graph = graph;

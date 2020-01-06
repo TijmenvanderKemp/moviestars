@@ -1,8 +1,8 @@
 package com.tijmen;
 
 public class Actor {
-    public String name;
-    public int hashCode;
+    public final String name;
+    public final int hashCode;
 
     public Actor(String name, int customHash) {
         this.name = name;
@@ -13,6 +13,11 @@ public class Actor {
         return name;
     }
 
+    /**
+     * We assume that we always call this with another Actor. We think it gives better performance not to check the type
+     * and just let it blow up when we make the wrong move.
+     */
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
