@@ -1,10 +1,7 @@
 package com.tijmen.part1;
 
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class HopcroftKarpParser {
 

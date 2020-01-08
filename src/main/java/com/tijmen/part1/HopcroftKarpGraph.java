@@ -1,7 +1,6 @@
 package com.tijmen.part1;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HopcroftKarpGraph {
     private final Set<Integer> femaleActors; // left side
@@ -9,13 +8,14 @@ public class HopcroftKarpGraph {
     private final Set<Integer> freeWomen; // Women not part of the maximal matching
     private final Set<Integer> freeMen; // Men not part of the maximal matching
     private final Collabs collabs; // bidirectional edges
+    private int totalNumberOfActors;
     private boolean[][] matching;
 
     public HopcroftKarpGraph(Set<Integer> femaleActors, Set<Integer> maleActors, Collabs collabs) {
         this.femaleActors = femaleActors;
         this.maleActors = maleActors;
         this.collabs = collabs;
-        int totalNumberOfActors = femaleActors.size() * 2;
+        totalNumberOfActors = femaleActors.size() * 2;
         matching = new boolean[totalNumberOfActors][totalNumberOfActors];
         freeMen = new HashSet<>(maleActors);
         freeWomen = new HashSet<>(femaleActors);
@@ -27,7 +27,8 @@ public class HopcroftKarpGraph {
     }
 
     public Set<List<Integer>> findAugmentingPaths() {
-        Map<Integer, Integer> partitioning = partition();
+        //breadth first search
+        int[] partitioning = partition();
 
         //depth first search
         HashSet<Integer> encounteredActors = new HashSet<>(freeWomen);
@@ -43,46 +44,55 @@ public class HopcroftKarpGraph {
         return augmentingPaths;
     }
 
-    Map<Integer, Integer> partition() {
+    int[] partition() {
         // breadth first search until
-        Queue<Pair<Integer, Integer>> queue = freeWomen.stream().map(actress -> new Pair<>(actress, 1)).collect(Collectors.toCollection(LinkedList::new));
-        Map<Integer, Integer> partitioning = new HashMap<>();
+        Queue<Integer> queue = new ArrayDeque<>(freeWomen);
+        int[] partitioning = new int[totalNumberOfActors];
         for (Integer woman : freeWomen) {
-            partitioning.put(woman, 1);
+            partitioning[woman] = 1;
         }
         while (!queue.isEmpty()) {
-            Pair<Integer, Integer> actorAndDepth = queue.remove();
-            Integer actor = actorAndDepth.getLeft();
-            Set<Integer> coworkers = collabs.get(actor);
-            int depth = actorAndDepth.getRight();
-            boolean hasToBeMatching = depth % 2 == 0;
-            for (Integer coworker : coworkers) {
-                if (!partitioning.containsKey(coworker) && hasToBeMatching == matching[actor][coworker]) {
-                    queue.add(new Pair<>(coworker, depth + 1));
-                    partitioning.put(coworker, depth + 1);
-                }
-            }
+            bfs(queue, partitioning);
         }
         return partitioning;
     }
 
-    private List<Integer> dfs(Integer currentActor, Map<Integer, Integer> partitioning, HashSet<Integer> encounteredActors) {
-        Stack<Pair<Integer, Integer>> stack = new Stack<>();
-        stack.push(new Pair<>(currentActor, 1));
-        Map<Integer, Integer> predecessors = new HashMap<>();
+    private void bfs(Queue<Integer> queue, int[] partitioning) {
+        Integer actor = queue.remove();
+        Set<Integer> coworkers = collabs.get(actor);
+        int depth = partitioning[actor];
+        boolean hasToBeMatching = depth % 2 == 0;
+        for (Integer coworker : coworkers) {
+            blerk(queue, partitioning, actor, depth, hasToBeMatching, coworker);
+        }
+    }
+
+    private void blerk(Queue<Integer> queue, int[] partitioning, int actor, int depth, boolean hasToBeMatching, int coworker) {
+        if (partitioning[coworker] == 0 && hasToBeMatching == matching[actor][coworker]) {
+            queue.add(coworker);
+            partitioning[coworker] = depth + 1;
+        }
+    }
+
+    private List<Integer> dfs(Integer currentActor, int[] partitioning, HashSet<Integer> encounteredActors) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(currentActor);
+        int[] predecessors = new int[totalNumberOfActors];
+        for(int i = 0; i < totalNumberOfActors; i++) {
+            predecessors[i] = -1;
+        }
         while (!stack.empty()) {
-            Pair<Integer, Integer> actorAndDepth = stack.pop();
-            Integer actor = actorAndDepth.getLeft();
-            int depth = actorAndDepth.getRight();
+            Integer actor = stack.pop();
+            int depth = partitioning[actor];
             Set<Integer> coworkers = collabs.get(actor);
             for (Integer coworker : coworkers) {
-                if (!encounteredActors.contains(coworker) && partitioning.containsKey(coworker) && partitioning.get(coworker) == depth + 1) {
+                if (!encounteredActors.contains(coworker) && partitioning[coworker] == depth + 1) {
                     encounteredActors.add(coworker);
-                    predecessors.put(coworker, actor);
+                    predecessors[coworker] = actor;
                     if (freeMen.contains(coworker)) {
                         return createAugmentingPath(predecessors, coworker);
                     }
-                    stack.push(new Pair<>(coworker, depth + 1));
+                    stack.push(coworker);
 
                 }
             }
@@ -91,12 +101,12 @@ public class HopcroftKarpGraph {
         return null;
     }
 
-    private List<Integer> createAugmentingPath(Map<Integer, Integer> predecessors, Integer finalChild) {
+    private List<Integer> createAugmentingPath(int[] predecessors, Integer finalChild) {
         List<Integer> augmentingPath = new ArrayList<>();
-        Integer child = finalChild;
-        while (child != null) {
+        int child = finalChild;
+        while (child != -1) {
             augmentingPath.add(child);
-            child = predecessors.get(child);
+            child = predecessors[child];
         }
         return augmentingPath;
     }
