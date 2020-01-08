@@ -22,7 +22,7 @@ public class Collabs {
         return collabs.get(actor);
     }
 
-    public void add(Integer actress, Integer actor) {
+    public void add(int actress, int actor) {
         collabsInit[actress][actor] = true;
         collabsInit[actor][actress] = true;
     }

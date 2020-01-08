@@ -61,8 +61,8 @@ public class HopcroftKarpParser {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
-        List<Integer> femaleCast = new LinkedList<>();
-        List<Integer> maleCast = new LinkedList<>();
+        List<Integer> femaleCast = new ArrayList<>();
+        List<Integer> maleCast = new ArrayList<>();
 
         for (int i = 0; i < castSize; i++) {
             Integer actor = actorRepository.getByName(in.nextLine()).hashCode;
