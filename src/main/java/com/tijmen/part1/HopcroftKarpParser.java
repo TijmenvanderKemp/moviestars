@@ -1,7 +1,10 @@
 package com.tijmen.part1;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class HopcroftKarpParser {
 
@@ -20,7 +23,7 @@ public class HopcroftKarpParser {
 
     public Problem parse() {
         String s = in.nextLine();
-        String[] actorsAndMovies = split(s);
+        String[] actorsAndMovies = s.split(" ");
         int numberOfActors = Integer.parseInt(actorsAndMovies[0]);
         int numberOfMovies = Integer.parseInt(actorsAndMovies[1]);
         actorRepository.femaleActors = getActors(numberOfActors, 0);
@@ -35,13 +38,6 @@ public class HopcroftKarpParser {
         collabs.constructMap();
 
         return new Problem(actorRepository, null, collabs);
-    }
-
-    private String[] split(String s) {
-        int index = s.indexOf(' ');
-        String actors = s.substring(0, index);
-        String movies = s.substring(index + 1);
-        return new String[]{actors, movies};
     }
 
     private Set<Integer> getActors(int numberOfActors, int startOfHash) {
