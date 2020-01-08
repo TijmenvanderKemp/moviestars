@@ -20,8 +20,6 @@ public class HopcroftKarpAlgorithm {
             augmentingPaths = graph.findAugmentingPaths();
         }
 
-        graph.calculateMatching();
-
         if (graph.getFreeWomen().isEmpty()) {
             return new Pair<>(Player.MARK, graph);
         } else {

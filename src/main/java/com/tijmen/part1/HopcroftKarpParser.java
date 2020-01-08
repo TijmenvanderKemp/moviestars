@@ -1,7 +1,10 @@
 package com.tijmen.part1;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class HopcroftKarpParser {
 
@@ -28,11 +31,9 @@ public class HopcroftKarpParser {
 
         Set<Integer> allActors = actorRepository.getAllActors();
 
-        //Map<Integer, Map<Integer, Integer>> collabCount = allActors.stream()
-        //        .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
         Collabs collabs = new Collabs(allActors.size());
         for (int i = 0; i < numberOfMovies; i++) {
-            addCollabs(null, collabs);
+            addCollabs(collabs);
         }
         collabs.constructMap();
 
@@ -57,7 +58,7 @@ public class HopcroftKarpParser {
         return set;
     }
 
-    private void addCollabs(Map<Integer, Map<Integer, Integer>> collabCount, Collabs collabs) {
+    private void addCollabs(Collabs collabs) {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
@@ -74,27 +75,11 @@ public class HopcroftKarpParser {
         }
 
         for (Integer actress : femaleCast) {
-            //Map<Integer, Integer> collabsWithActress = collabCount.get(actress);
             for (Integer actor : maleCast) {
                 collabs.add(actress, actor);
-                //Map<Integer, Integer> collabsWithActor = collabCount.get(actor);
-                //collabsWithActress.compute(actor, this::increaseOrDefault1);
-                //collabsWithActor.compute(actress, this::increaseOrDefault1);
             }
         }
 
     }
 
-    private int increaseOrDefault1(Integer actor, Integer numberOfCollabs) {
-        return numberOfCollabs != null ? numberOfCollabs + 1 : 1;
-    }
-
-    private Set<Integer> getCast(int castSize) {
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < castSize; i++) {
-            String name = in.nextLine();
-            set.add(actorRepository.customHashes.get(name));
-        }
-        return set;
-    }
 }

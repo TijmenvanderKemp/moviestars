@@ -10,8 +10,6 @@ public class HopcroftKarpGraph {
     private final Set<Integer> freeMen; // Men not part of the maximal matching
     private final Collabs collabs; // bidirectional edges
     private boolean[][] matching;
-    private Map<Integer, Integer> m2fMatching = new HashMap<>();
-    private Map<Integer, Integer> f2mMatching = new HashMap<>();
 
     public HopcroftKarpGraph(Set<Integer> femaleActors, Set<Integer> maleActors, Collabs collabs) {
         this.femaleActors = femaleActors;
@@ -136,14 +134,6 @@ public class HopcroftKarpGraph {
         return collabs;
     }
 
-    public Map<Integer, Integer> getM2fMatching() {
-        return m2fMatching;
-    }
-
-    public Map<Integer, Integer> getF2mMatching() {
-        return f2mMatching;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -161,15 +151,5 @@ public class HopcroftKarpGraph {
         return Objects.hash(femaleActors, maleActors, freeWomen, freeMen, collabs);
     }
 
-    public void calculateMatching() {
-        for (Integer actress : femaleActors) {
-            for (Integer actor : maleActors) {
-                if (matching[actress][actor]) {
-                    f2mMatching.put(actress, actor);
-                    m2fMatching.put(actor, actress);
-                }
-            }
-        }
-    }
 }
 
