@@ -7,7 +7,7 @@ import java.util.Set;
 
 // Bidirectional and mutable
 public class Collabs {
-    private final Map<Actor, Set<Actor>> collabs = new HashMap<>();
+    private final Map<Integer, Set<Integer>> collabs = new HashMap<>();
     private final boolean[][] collabsInit;
     private final int size;
     private final int pivot;
@@ -18,29 +18,29 @@ public class Collabs {
         collabsInit = new boolean[size][size];
     }
 
-    public Set<Actor> get(Actor actor) {
+    public Set<Integer> get(Integer actor) {
         return collabs.get(actor);
     }
 
-    public void add(Actor actress, Actor actor) {
-        collabsInit[actress.hashCode][actor.hashCode] = true;
-        collabsInit[actor.hashCode][actress.hashCode] = true;
+    public void add(Integer actress, Integer actor) {
+        collabsInit[actress][actor] = true;
+        collabsInit[actor][actress] = true;
     }
 
     public void constructMap() {
         for (int j = 0; j < pivot; j++) {
-            Set<Actor> actors = new HashSet<>();
-            Set<Actor> actresses = new HashSet<>();
+            Set<Integer> actors = new HashSet<>();
+            Set<Integer> actresses = new HashSet<>();
             for (int i = pivot; i < size; i++) {
                 if (collabsInit[j][i]) {
-                    actors.add(new Actor(null, i));
+                    actors.add(i);
                 }
                 if (collabsInit[j + pivot][i - pivot]) {
-                    actresses.add(new Actor(null, i - pivot));
+                    actresses.add(i - pivot);
                 }
             }
-            collabs.put(new Actor(null, j), actors);
-            collabs.put(new Actor(null, j + pivot), actresses);
+            collabs.put(j, actors);
+            collabs.put(j + pivot, actresses);
         }
     }
 }

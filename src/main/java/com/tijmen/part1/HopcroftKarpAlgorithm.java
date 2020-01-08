@@ -14,7 +14,7 @@ public class HopcroftKarpAlgorithm {
      * @return (winning player, graph)
      */
     public Pair<Player, HopcroftKarpGraph> solve() {
-        Set<List<Actor>> augmentingPaths = graph.findAugmentingPaths();
+        Set<List<Integer>> augmentingPaths = graph.findAugmentingPaths();
         while (!augmentingPaths.isEmpty()) {
             graph.augmentGraph(augmentingPaths);
             augmentingPaths = graph.findAugmentingPaths();

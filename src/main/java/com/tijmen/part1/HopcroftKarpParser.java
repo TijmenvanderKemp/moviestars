@@ -26,9 +26,9 @@ public class HopcroftKarpParser {
         actorRepository.femaleActors = getActors(numberOfActors, 0);
         actorRepository.maleActors = getActors(numberOfActors, numberOfActors);
 
-        Set<Actor> allActors = actorRepository.getAllActors();
+        Set<Integer> allActors = actorRepository.getAllActors();
 
-        //Map<Actor, Map<Actor, Integer>> collabCount = allActors.stream()
+        //Map<Integer, Map<Integer, Integer>> collabCount = allActors.stream()
         //        .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
         Collabs collabs = new Collabs(allActors.size());
         for (int i = 0; i < numberOfMovies; i++) {
@@ -46,38 +46,38 @@ public class HopcroftKarpParser {
         return new String[]{actors, movies};
     }
 
-    private Set<Actor> getActors(int numberOfActors, int startOfHash) {
-        Set<Actor> set = new HashSet<>();
+    private Set<Integer> getActors(int numberOfActors, int startOfHash) {
+        Set<Integer> set = new HashSet<>();
         for (int i = 0; i < numberOfActors; i++) {
             String name = in.nextLine();
-            Actor actor = new Actor(name, startOfHash + i);
+            Integer actor = startOfHash + i;
             actorRepository.customHashes.put(name, startOfHash + i);
             set.add(actor);
         }
         return set;
     }
 
-    private void addCollabs(Map<Actor, Map<Actor, Integer>> collabCount, Collabs collabs) {
+    private void addCollabs(Map<Integer, Map<Integer, Integer>> collabCount, Collabs collabs) {
         // Ignore the name of the movie
         in.nextLine();
         int castSize = Integer.parseInt(in.nextLine());
-        List<Actor> femaleCast = new LinkedList<>();
-        List<Actor> maleCast = new LinkedList<>();
+        List<Integer> femaleCast = new LinkedList<>();
+        List<Integer> maleCast = new LinkedList<>();
 
-        for(int i = 0; i < castSize; i++) {
-            Actor actor = actorRepository.getByName(in.nextLine());
-            if(actorRepository.femaleActors.contains(actor)) {
+        for (int i = 0; i < castSize; i++) {
+            Integer actor = actorRepository.getByName(in.nextLine()).hashCode;
+            if (actorRepository.femaleActors.contains(actor)) {
                 femaleCast.add(actor);
             } else {
                 maleCast.add(actor);
             }
         }
 
-        for (Actor actress : femaleCast) {
-            //Map<Actor, Integer> collabsWithActress = collabCount.get(actress);
-            for (Actor actor : maleCast) {
+        for (Integer actress : femaleCast) {
+            //Map<Integer, Integer> collabsWithActress = collabCount.get(actress);
+            for (Integer actor : maleCast) {
                 collabs.add(actress, actor);
-                //Map<Actor, Integer> collabsWithActor = collabCount.get(actor);
+                //Map<Integer, Integer> collabsWithActor = collabCount.get(actor);
                 //collabsWithActress.compute(actor, this::increaseOrDefault1);
                 //collabsWithActor.compute(actress, this::increaseOrDefault1);
             }
@@ -85,15 +85,15 @@ public class HopcroftKarpParser {
 
     }
 
-    private int increaseOrDefault1(Actor actor, Integer numberOfCollabs) {
+    private int increaseOrDefault1(Integer actor, Integer numberOfCollabs) {
         return numberOfCollabs != null ? numberOfCollabs + 1 : 1;
     }
 
-    private Set<Actor> getCast(int castSize) {
-        Set<Actor> set = new HashSet<>();
+    private Set<Integer> getCast(int castSize) {
+        Set<Integer> set = new HashSet<>();
         for (int i = 0; i < castSize; i++) {
             String name = in.nextLine();
-            set.add(new Actor(name, actorRepository.customHashes.get(name)));
+            set.add(actorRepository.customHashes.get(name));
         }
         return set;
     }

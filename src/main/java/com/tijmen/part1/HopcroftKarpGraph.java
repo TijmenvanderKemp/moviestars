@@ -4,16 +4,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HopcroftKarpGraph {
-    private final Set<Actor> femaleActors; // left side
-    private final Set<Actor> maleActors; // right side
-    private final Set<Actor> freeWomen; // Women not part of the maximal matching
-    private final Set<Actor> freeMen; // Men not part of the maximal matching
+    private final Set<Integer> femaleActors; // left side
+    private final Set<Integer> maleActors; // right side
+    private final Set<Integer> freeWomen; // Women not part of the maximal matching
+    private final Set<Integer> freeMen; // Men not part of the maximal matching
     private final Collabs collabs; // bidirectional edges
     private boolean[][] matching;
-    private Map<Actor, Actor> m2fMatching = new HashMap<>();
-    private Map<Actor, Actor> f2mMatching = new HashMap<>();
+    private Map<Integer, Integer> m2fMatching = new HashMap<>();
+    private Map<Integer, Integer> f2mMatching = new HashMap<>();
 
-    public HopcroftKarpGraph(Set<Actor> femaleActors, Set<Actor> maleActors, Collabs collabs) {
+    public HopcroftKarpGraph(Set<Integer> femaleActors, Set<Integer> maleActors, Collabs collabs) {
         this.femaleActors = femaleActors;
         this.maleActors = maleActors;
         this.collabs = collabs;
@@ -28,15 +28,15 @@ public class HopcroftKarpGraph {
         return new HopcroftKarpGraph(problem.actorRepository.femaleActors, problem.actorRepository.maleActors, problem.collabs);
     }
 
-    public Set<List<Actor>> findAugmentingPaths() {
-        Map<Actor, Integer> partitioning = partition();
+    public Set<List<Integer>> findAugmentingPaths() {
+        Map<Integer, Integer> partitioning = partition();
 
         //depth first search
-        HashSet<Actor> encounteredActors = new HashSet<>(freeWomen);
+        HashSet<Integer> encounteredActors = new HashSet<>(freeWomen);
 
-        Set<List<Actor>> augmentingPaths = new HashSet<>();
-        for (Actor actor : freeWomen) {
-            List<Actor> augmentingPath = dfs(actor, partitioning, encounteredActors);
+        Set<List<Integer>> augmentingPaths = new HashSet<>();
+        for (Integer actor : freeWomen) {
+            List<Integer> augmentingPath = dfs(actor, partitioning, encounteredActors);
             if (augmentingPath != null) {
                 augmentingPaths.add(augmentingPath);
             }
@@ -45,21 +45,21 @@ public class HopcroftKarpGraph {
         return augmentingPaths;
     }
 
-    Map<Actor, Integer> partition() {
+    Map<Integer, Integer> partition() {
         // breadth first search until
-        Queue<Pair<Actor, Integer>> queue = freeWomen.stream().map(actress -> new Pair<>(actress, 1)).collect(Collectors.toCollection(LinkedList::new));
-        Map<Actor, Integer> partitioning = new HashMap<>();
-        for (Actor woman : freeWomen) {
+        Queue<Pair<Integer, Integer>> queue = freeWomen.stream().map(actress -> new Pair<>(actress, 1)).collect(Collectors.toCollection(LinkedList::new));
+        Map<Integer, Integer> partitioning = new HashMap<>();
+        for (Integer woman : freeWomen) {
             partitioning.put(woman, 1);
         }
         while (!queue.isEmpty()) {
-            Pair<Actor, Integer> actorAndDepth = queue.remove();
-            Actor actor = actorAndDepth.getLeft();
-            Set<Actor> coworkers = collabs.get(actor);
+            Pair<Integer, Integer> actorAndDepth = queue.remove();
+            Integer actor = actorAndDepth.getLeft();
+            Set<Integer> coworkers = collabs.get(actor);
             int depth = actorAndDepth.getRight();
             boolean hasToBeMatching = depth % 2 == 0;
-            for (Actor coworker : coworkers) {
-                if (!partitioning.containsKey(coworker) && hasToBeMatching == matching[actor.hashCode][coworker.hashCode]) {
+            for (Integer coworker : coworkers) {
+                if (!partitioning.containsKey(coworker) && hasToBeMatching == matching[actor][coworker]) {
                     queue.add(new Pair<>(coworker, depth + 1));
                     partitioning.put(coworker, depth + 1);
                 }
@@ -68,16 +68,16 @@ public class HopcroftKarpGraph {
         return partitioning;
     }
 
-    private List<Actor> dfs(Actor currentActor, Map<Actor, Integer> partitioning, HashSet<Actor> encounteredActors) {
-        Stack<Pair<Actor, Integer>> stack = new Stack<>();
+    private List<Integer> dfs(Integer currentActor, Map<Integer, Integer> partitioning, HashSet<Integer> encounteredActors) {
+        Stack<Pair<Integer, Integer>> stack = new Stack<>();
         stack.push(new Pair<>(currentActor, 1));
-        Map<Actor, Actor> predecessors = new HashMap<>();
+        Map<Integer, Integer> predecessors = new HashMap<>();
         while (!stack.empty()) {
-            Pair<Actor, Integer> actorAndDepth = stack.pop();
-            Actor actor = actorAndDepth.getLeft();
+            Pair<Integer, Integer> actorAndDepth = stack.pop();
+            Integer actor = actorAndDepth.getLeft();
             int depth = actorAndDepth.getRight();
-            Set<Actor> coworkers = collabs.get(actor);
-            for (Actor coworker : coworkers) {
+            Set<Integer> coworkers = collabs.get(actor);
+            for (Integer coworker : coworkers) {
                 if (!encounteredActors.contains(coworker) && partitioning.containsKey(coworker) && partitioning.get(coworker) == depth + 1) {
                     encounteredActors.add(coworker);
                     predecessors.put(coworker, actor);
@@ -93,9 +93,9 @@ public class HopcroftKarpGraph {
         return null;
     }
 
-    private List<Actor> createAugmentingPath(Map<Actor, Actor> predecessors, Actor finalChild) {
-        List<Actor> augmentingPath = new ArrayList<>();
-        Actor child = finalChild;
+    private List<Integer> createAugmentingPath(Map<Integer, Integer> predecessors, Integer finalChild) {
+        List<Integer> augmentingPath = new ArrayList<>();
+        Integer child = finalChild;
         while (child != null) {
             augmentingPath.add(child);
             child = predecessors.get(child);
@@ -103,18 +103,18 @@ public class HopcroftKarpGraph {
         return augmentingPath;
     }
 
-    public void augmentGraph(Set<List<Actor>> augmentingPaths) {
-        for (List<Actor> augmentingPath : augmentingPaths) {
+    public void augmentGraph(Set<List<Integer>> augmentingPaths) {
+        for (List<Integer> augmentingPath : augmentingPaths) {
             augmentGraph(augmentingPath);
         }
     }
 
-    public void augmentGraph(List<Actor> augmentingPath) {
-        Iterator<Actor> iterator = augmentingPath.iterator();
-        Actor actor1 = iterator.next();
+    public void augmentGraph(List<Integer> augmentingPath) {
+        Iterator<Integer> iterator = augmentingPath.iterator();
+        Integer actor1 = iterator.next();
         freeMen.remove(actor1);
 
-        Actor actor2 = null;
+        Integer actor2 = null;
         while (iterator.hasNext()) {
             actor2 = iterator.next();
             switchMatching(actor1, actor2);
@@ -123,12 +123,12 @@ public class HopcroftKarpGraph {
         freeWomen.remove(actor2);
     }
 
-    private void switchMatching(Actor a1, Actor a2) {
-        matching[a1.hashCode][a2.hashCode] = !matching[a1.hashCode][a2.hashCode];
-        matching[a2.hashCode][a1.hashCode] = !matching[a2.hashCode][a1.hashCode];
+    private void switchMatching(Integer a1, Integer a2) {
+        matching[a1][a2] = !matching[a1][a2];
+        matching[a2][a1] = !matching[a2][a1];
     }
 
-    public Set<Actor> getFreeWomen() {
+    public Set<Integer> getFreeWomen() {
         return freeWomen;
     }
 
@@ -136,11 +136,11 @@ public class HopcroftKarpGraph {
         return collabs;
     }
 
-    public Map<Actor, Actor> getM2fMatching() {
+    public Map<Integer, Integer> getM2fMatching() {
         return m2fMatching;
     }
 
-    public Map<Actor, Actor> getF2mMatching() {
+    public Map<Integer, Integer> getF2mMatching() {
         return f2mMatching;
     }
 
@@ -162,9 +162,9 @@ public class HopcroftKarpGraph {
     }
 
     public void calculateMatching() {
-        for (Actor actress : femaleActors) {
-            for (Actor actor : maleActors) {
-                if (matching[actress.hashCode][actor.hashCode]) {
+        for (Integer actress : femaleActors) {
+            for (Integer actor : maleActors) {
+                if (matching[actress][actor]) {
                     f2mMatching.put(actress, actor);
                     m2fMatching.put(actor, actress);
                 }
