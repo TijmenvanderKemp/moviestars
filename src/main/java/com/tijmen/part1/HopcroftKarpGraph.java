@@ -31,7 +31,10 @@ public class HopcroftKarpGraph {
         int[] partitioning = partition();
 
         //depth first search
-        HashSet<Integer> encounteredActors = new HashSet<>(freeWomen);
+        boolean[] encounteredActors = new boolean[totalNumberOfActors];
+        for (Integer actress : freeWomen) {
+            encounteredActors[actress] = true;
+        }
 
         Set<List<Integer>> augmentingPaths = new HashSet<>();
         for (Integer actor : freeWomen) {
@@ -66,11 +69,11 @@ public class HopcroftKarpGraph {
         return partitioning;
     }
 
-    private List<Integer> dfs(Integer currentActor, int[] partitioning, HashSet<Integer> encounteredActors) {
+    private List<Integer> dfs(Integer currentActor, int[] partitioning, boolean[] encounteredActors) {
         Stack<Integer> stack = new Stack<>();
         stack.push(currentActor);
         int[] predecessors = new int[totalNumberOfActors];
-        for(int i = 0; i < totalNumberOfActors; i++) {
+        for (int i = 0; i < totalNumberOfActors; i++) {
             predecessors[i] = -1;
         }
         while (!stack.isEmpty()) {
@@ -78,8 +81,8 @@ public class HopcroftKarpGraph {
             int depth = partitioning[actor];
             Set<Integer> coworkers = collabs.get(actor);
             for (Integer coworker : coworkers) {
-                if (!encounteredActors.contains(coworker) && partitioning[coworker] == depth + 1) {
-                    encounteredActors.add(coworker);
+                if (!encounteredActors[coworker] && partitioning[coworker] == depth + 1) {
+                    encounteredActors[coworker] = true;
                     predecessors[coworker] = actor;
                     if (freeMen.contains(coworker)) {
                         return createAugmentingPath(predecessors, coworker);
@@ -133,23 +136,6 @@ public class HopcroftKarpGraph {
 
     public Collabs getCollabs() {
         return collabs;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HopcroftKarpGraph that = (HopcroftKarpGraph) o;
-        return Objects.equals(femaleActors, that.femaleActors) &&
-                Objects.equals(maleActors, that.maleActors) &&
-                Objects.equals(freeWomen, that.freeWomen) &&
-                Objects.equals(freeMen, that.freeMen) &&
-                Objects.equals(collabs, that.collabs);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(femaleActors, maleActors, freeWomen, freeMen, collabs);
     }
 
 }
