@@ -52,26 +52,18 @@ public class HopcroftKarpGraph {
             partitioning[woman] = 1;
         }
         while (!queue.isEmpty()) {
-            bfs(queue, partitioning);
+            Integer actor = queue.remove();
+            Set<Integer> coworkers = collabs.get(actor);
+            int depth = partitioning[actor];
+            boolean hasToBeMatching = depth % 2 == 0;
+            for (Integer coworker : coworkers) {
+                if (partitioning[coworker] == 0 && hasToBeMatching == matching[actor][coworker]) {
+                    queue.add(coworker);
+                    partitioning[coworker] = depth + 1;
+                }
+            }
         }
         return partitioning;
-    }
-
-    private void bfs(Queue<Integer> queue, int[] partitioning) {
-        Integer actor = queue.remove();
-        Set<Integer> coworkers = collabs.get(actor);
-        int depth = partitioning[actor];
-        boolean hasToBeMatching = depth % 2 == 0;
-        for (Integer coworker : coworkers) {
-            blerk(queue, partitioning, actor, depth, hasToBeMatching, coworker);
-        }
-    }
-
-    private void blerk(Queue<Integer> queue, int[] partitioning, int actor, int depth, boolean hasToBeMatching, int coworker) {
-        if (partitioning[coworker] == 0 && hasToBeMatching == matching[actor][coworker]) {
-            queue.add(coworker);
-            partitioning[coworker] = depth + 1;
-        }
     }
 
     private List<Integer> dfs(Integer currentActor, int[] partitioning, HashSet<Integer> encounteredActors) {
@@ -93,7 +85,6 @@ public class HopcroftKarpGraph {
                         return createAugmentingPath(predecessors, coworker);
                     }
                     stack.push(coworker);
-
                 }
             }
         }
