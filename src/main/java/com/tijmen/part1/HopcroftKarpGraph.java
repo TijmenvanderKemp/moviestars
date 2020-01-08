@@ -77,7 +77,7 @@ public class HopcroftKarpGraph {
             Actor actor = actorAndDepth.getLeft();
             int depth = actorAndDepth.getRight();
             Set<Actor> coworkers = collabs.get(actor);
-            for(Actor coworker : coworkers) {
+            for (Actor coworker : coworkers) {
                 if (!encounteredActors.contains(coworker) && partitioning.containsKey(coworker) && partitioning.get(coworker) == depth + 1) {
                     encounteredActors.add(coworker);
                     predecessors.put(coworker, actor);
@@ -103,23 +103,24 @@ public class HopcroftKarpGraph {
         return augmentingPath;
     }
 
-    public  void augmentGraph(Set<LinkedList<Actor>> augmentingPaths) {
-        for(LinkedList<Actor> augmentingPath : augmentingPaths) {
+    public void augmentGraph(Set<LinkedList<Actor>> augmentingPaths) {
+        for (LinkedList<Actor> augmentingPath : augmentingPaths) {
             augmentGraph(augmentingPath);
         }
     }
 
     public void augmentGraph(LinkedList<Actor> augmentingPath) {
-        freeWomen.remove(augmentingPath.getLast());
-        freeMen.remove(augmentingPath.getFirst());
-
         Iterator<Actor> iterator = augmentingPath.descendingIterator();
         Actor actor1 = iterator.next();
+        freeMen.remove(actor1);
+
+        Actor actor2 = null;
         while (iterator.hasNext()) {
-            Actor actor2 = iterator.next();
+            actor2 = iterator.next();
             switchMatching(actor1, actor2);
             actor1 = actor2;
         }
+        freeWomen.remove(actor2);
     }
 
     private void switchMatching(Actor a1, Actor a2) {
@@ -161,9 +162,9 @@ public class HopcroftKarpGraph {
     }
 
     public void calculateMatching() {
-        for(Actor actress : femaleActors) {
-            for(Actor actor : maleActors) {
-                if( matching[actress.hashCode][actor.hashCode] ) {
+        for (Actor actress : femaleActors) {
+            for (Actor actor : maleActors) {
+                if (matching[actress.hashCode][actor.hashCode]) {
                     f2mMatching.put(actress, actor);
                     m2fMatching.put(actor, actress);
                 }
@@ -171,3 +172,4 @@ public class HopcroftKarpGraph {
         }
     }
 }
+

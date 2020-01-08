@@ -17,12 +17,7 @@ public class Collabs {
     }
 
     public Set<Actor> get(Actor actor) {
-        if (ignored.contains(actor)) {
-            return Collections.emptySet();
-        }
-        return collabs.get(actor).stream()
-                .filter(it -> !ignored.contains(it))
-                .collect(Collectors.toSet());
+        return collabs.get(actor);
     }
 
     public void ignore(Actor option) {
