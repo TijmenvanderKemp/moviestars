@@ -30,7 +30,7 @@ public class HopcroftKarpParser {
 
         //Map<Actor, Map<Actor, Integer>> collabCount = allActors.stream()
         //        .collect(Collectors.toMap(actor -> actor, actor -> new HashMap<>()));
-        Collabs collabs = new Collabs(allActors);
+        Collabs collabs = new Collabs(allActors.size());
         for (int i = 0; i < numberOfMovies; i++) {
             addCollabs(null, collabs);
         }
@@ -81,6 +81,8 @@ public class HopcroftKarpParser {
                 //collabsWithActor.compute(actress, this::increaseOrDefault1);
             }
         }
+
+        collabs.constructMap();
     }
 
     private int increaseOrDefault1(Actor actor, Integer numberOfCollabs) {
