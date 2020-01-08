@@ -110,7 +110,7 @@ public class HopcroftKarpGraph {
     }
 
     public void augmentGraph(LinkedList<Actor> augmentingPath) {
-        Iterator<Actor> iterator = augmentingPath.descendingIterator();
+        Iterator<Actor> iterator = augmentingPath.iterator();
         Actor actor1 = iterator.next();
         freeMen.remove(actor1);
 
