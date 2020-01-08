@@ -34,6 +34,7 @@ public class HopcroftKarpParser {
         for (int i = 0; i < numberOfMovies; i++) {
             addCollabs(null, collabs);
         }
+        collabs.constructMap();
 
         return new Problem(actorRepository, null, collabs);
     }
@@ -82,7 +83,6 @@ public class HopcroftKarpParser {
             }
         }
 
-        collabs.constructMap();
     }
 
     private int increaseOrDefault1(Actor actor, Integer numberOfCollabs) {
