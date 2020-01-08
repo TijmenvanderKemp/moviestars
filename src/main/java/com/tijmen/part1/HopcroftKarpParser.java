@@ -2,7 +2,6 @@ package com.tijmen.part1;
 
 import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HopcroftKarpParser {
 
@@ -21,7 +20,7 @@ public class HopcroftKarpParser {
 
     public Problem parse() {
         String s = in.nextLine();
-        String[] actorsAndMovies = s.split(" ");
+        String[] actorsAndMovies = split(s);
         int numberOfActors = Integer.parseInt(actorsAndMovies[0]);
         int numberOfMovies = Integer.parseInt(actorsAndMovies[1]);
         actorRepository.femaleActors = getActors(numberOfActors, 0);
@@ -37,6 +36,13 @@ public class HopcroftKarpParser {
         }
 
         return new Problem(actorRepository, null, collabs);
+    }
+
+    private String[] split(String s) {
+        int index = s.indexOf(' ');
+        String actors = s.substring(0, index);
+        String movies = s.substring(index + 1);
+        return new String[]{actors, movies};
     }
 
     private Set<Actor> getActors(int numberOfActors, int startOfHash) {
