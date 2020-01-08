@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AllFilesTestHopcroftKarpAlgorithm {
+public class AllFilesTestHopcroftKarpAlgorithmPart2 {
     @Test
     public void testAlleOfficieleFiles() {
         File inFolder = new File(TestFile.getAsUrl("samples/in/").getPath());
