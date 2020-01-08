@@ -28,15 +28,15 @@ public class HopcroftKarpGraph {
         return new HopcroftKarpGraph(problem.actorRepository.femaleActors, problem.actorRepository.maleActors, problem.collabs);
     }
 
-    public Set<LinkedList<Actor>> findAugmentingPaths() {
+    public Set<List<Actor>> findAugmentingPaths() {
         Map<Actor, Integer> partitioning = partition();
 
         //depth first search
         HashSet<Actor> encounteredActors = new HashSet<>(freeWomen);
 
-        Set<LinkedList<Actor>> augmentingPaths = new HashSet<>();
+        Set<List<Actor>> augmentingPaths = new HashSet<>();
         for (Actor actor : freeWomen) {
-            LinkedList<Actor> augmentingPath = dfs(actor, partitioning, encounteredActors);
+            List<Actor> augmentingPath = dfs(actor, partitioning, encounteredActors);
             if (augmentingPath != null) {
                 augmentingPaths.add(augmentingPath);
             }
@@ -68,7 +68,7 @@ public class HopcroftKarpGraph {
         return partitioning;
     }
 
-    private LinkedList<Actor> dfs(Actor currentActor, Map<Actor, Integer> partitioning, HashSet<Actor> encounteredActors) {
+    private List<Actor> dfs(Actor currentActor, Map<Actor, Integer> partitioning, HashSet<Actor> encounteredActors) {
         Stack<Pair<Actor, Integer>> stack = new Stack<>();
         stack.push(new Pair<>(currentActor, 1));
         Map<Actor, Actor> predecessors = new HashMap<>();
@@ -93,8 +93,8 @@ public class HopcroftKarpGraph {
         return null;
     }
 
-    private LinkedList<Actor> createAugmentingPath(Map<Actor, Actor> predecessors, Actor finalChild) {
-        LinkedList<Actor> augmentingPath = new LinkedList<>();
+    private List<Actor> createAugmentingPath(Map<Actor, Actor> predecessors, Actor finalChild) {
+        List<Actor> augmentingPath = new ArrayList<>();
         Actor child = finalChild;
         while (child != null) {
             augmentingPath.add(child);
@@ -103,13 +103,13 @@ public class HopcroftKarpGraph {
         return augmentingPath;
     }
 
-    public void augmentGraph(Set<LinkedList<Actor>> augmentingPaths) {
-        for (LinkedList<Actor> augmentingPath : augmentingPaths) {
+    public void augmentGraph(Set<List<Actor>> augmentingPaths) {
+        for (List<Actor> augmentingPath : augmentingPaths) {
             augmentGraph(augmentingPath);
         }
     }
 
-    public void augmentGraph(LinkedList<Actor> augmentingPath) {
+    public void augmentGraph(List<Actor> augmentingPath) {
         Iterator<Actor> iterator = augmentingPath.iterator();
         Actor actor1 = iterator.next();
         freeMen.remove(actor1);

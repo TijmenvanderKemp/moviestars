@@ -1,6 +1,6 @@
 package com.tijmen.part1;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class HopcroftKarpAlgorithm {
@@ -14,7 +14,7 @@ public class HopcroftKarpAlgorithm {
      * @return (winning player, graph)
      */
     public Pair<Player, HopcroftKarpGraph> solve() {
-        Set<LinkedList<Actor>> augmentingPaths = graph.findAugmentingPaths();
+        Set<List<Actor>> augmentingPaths = graph.findAugmentingPaths();
         while (!augmentingPaths.isEmpty()) {
             graph.augmentGraph(augmentingPaths);
             augmentingPaths = graph.findAugmentingPaths();
