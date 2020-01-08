@@ -1,10 +1,7 @@
 package com.tijmen.part2;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HopcroftKarpParser {
@@ -57,8 +54,8 @@ public class HopcroftKarpParser {
         // Ignore the name of the movie
         in.nextLine();
 
-        Set<Actor> femaleCast = new HashSet<>();
-        Set<Actor> maleCast = new HashSet<>();
+        List<Actor> femaleCast = new LinkedList<>();
+        List<Actor> maleCast = new LinkedList<>();
 
         int castSize = Integer.parseInt(in.nextLine());
         for (int i = 0; i < castSize; i++) {
