@@ -73,7 +73,7 @@ public class HopcroftKarpGraph {
         for(int i = 0; i < totalNumberOfActors; i++) {
             predecessors[i] = -1;
         }
-        while (!stack.empty()) {
+        while (!stack.isEmpty()) {
             Integer actor = stack.pop();
             int depth = partitioning[actor];
             Set<Integer> coworkers = collabs.get(actor);
